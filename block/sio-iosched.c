@@ -242,8 +242,49 @@ sio_latter_request(struct request_queue *q, struct request *rq)
 	return list_entry(rq->queuelist.next, struct request, queuelist);
 }
 
-static void *
-sio_init_queue(struct request_queue *q)
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0)
+static int sio_init_queue(struct request_queue *q, struct elevator_type *e)
+{
+	struct sio_data *sd;
+	struct elevator_queue *eq;
+
+	eq = elevator_alloc(q, e);
+	if (!eq)
+		return -ENOMEM;
+
+	/* Allocate structure */
+	sd = kmalloc_node(sizeof(*sd), GFP_KERNEL, q->node);
+	if (!sd) {
+		kobject_put(&eq->kobj);
+		return -ENOMEM;
+	}
+
+	eq->elevator_data = sd;
+
+	/* Initialize fifo lists */
+	INIT_LIST_HEAD(&sd->fifo_list[SYNC][READ]);
+	INIT_LIST_HEAD(&sd->fifo_list[SYNC][WRITE]);
+	INIT_LIST_HEAD(&sd->fifo_list[ASYNC][READ]);
+	INIT_LIST_HEAD(&sd->fifo_list[ASYNC][WRITE]);
+
+	/* Initialize data */
+	sd->batched = 0;
+	sd->fifo_expire[SYNC][READ] = sync_read_expire;
+	sd->fifo_expire[SYNC][WRITE] = sync_write_expire;
+	sd->fifo_expire[ASYNC][READ] = async_read_expire;
+	sd->fifo_expire[ASYNC][WRITE] = async_write_expire;
+	sd->fifo_batch = fifo_batch;
+	sd->writes_starved = writes_starved;
+
+	spin_lock_irq(q->queue_lock);
+	q->elevator = eq;
+	spin_unlock_irq(q->queue_lock);
+
+	return 0;
+}
+#else
+static void *sio_init_queue(struct request_queue *q)
 {
 	struct sio_data *sd;
 
@@ -265,9 +306,11 @@ sio_init_queue(struct request_queue *q)
 	sd->fifo_expire[ASYNC][READ] = async_read_expire;
 	sd->fifo_expire[ASYNC][WRITE] = async_write_expire;
 	sd->fifo_batch = fifo_batch;
+	sd->writes_starved = writes_starved;
 
 	return sd;
 }
+#endif
 
 static void
 sio_exit_queue(struct elevator_queue *e)
