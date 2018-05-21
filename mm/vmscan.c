@@ -142,7 +142,7 @@ struct scan_control {
 #if CONFIG_MEMCG_HIGHER_SWAPPINESS
 int vm_swappiness = CONFIG_MEMCG_HIGHER_SWAPPINESS;
 #else
-int vm_swappiness = 60;
+int vm_swappiness = 8;
 #endif
 
 /*
@@ -150,7 +150,6 @@ int vm_swappiness = 60;
  * zones.
  */
 unsigned long vm_total_pages;
-
 static LIST_HEAD(shrinker_list);
 static DECLARE_RWSEM(shrinker_rwsem);
 
