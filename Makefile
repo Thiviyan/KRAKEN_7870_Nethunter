@@ -412,6 +412,8 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -Wno-format-security \
 		   -std=gnu89
 
+KBUILD_CLFAGS += -floop-nest-optimize -fgraphite-identity -ftree-loop-distribution
+
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL := -mtune=cortex-a53 -mcpu=cortex-a53 -funsafe-math-optimizations
 KBUILD_AFLAGS   := -D__ASSEMBLY__
