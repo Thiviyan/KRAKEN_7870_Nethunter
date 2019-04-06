@@ -334,7 +334,7 @@ bool rwsem_spin_on_owner(struct rw_semaphore *sem, struct task_struct *owner)
 			break;
 
 		if (i++ > 1000)
-			cpu_relax_lowlatency();
+			cpu_relax();
 	}
 	rcu_read_unlock();
 
