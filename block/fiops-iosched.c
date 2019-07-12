@@ -501,7 +501,7 @@ static void fiops_insert_request(struct request_queue *q, struct request *rq)
 static inline void fiops_schedule_dispatch(struct fiops_data *fiopsd)
 {
 	if (fiopsd->busy_queues)
-		kblockd_schedule_work(fiopsd->queue, &fiopsd->unplug_work);
+		kblockd_schedule_work(&fiopsd->unplug_work);
 }
 
 static void fiops_completed_request(struct request_queue *q, struct request *rq)
@@ -528,9 +528,7 @@ fiops_find_rq_fmerge(struct fiops_data *fiopsd, struct bio *bio)
 	cic = fiops_cic_lookup(fiopsd, tsk->io_context);
 
 	if (cic) {
-		sector_t sector = bio->bi_sector + bio_sectors(bio);
-
-		return elv_rb_find(&cic->sort_list, sector);
+		return elv_rb_find(&cic->sort_list, bio_end_sector(bio));
 	}
 
 	return NULL;
@@ -543,7 +541,7 @@ static int fiops_merge(struct request_queue *q, struct request **req,
 	struct request *__rq;
 
 	__rq = fiops_find_rq_fmerge(fiopsd, bio);
-	if (__rq && elv_rq_merge_ok(__rq, bio)) {
+	if (__rq && elv_bio_merge_ok(__rq, bio)) {
 		*req = __rq;
 		return ELEVATOR_FRONT_MERGE;
 	}
@@ -579,7 +577,7 @@ fiops_merged_requests(struct request_queue *q, struct request *rq,
 		fiops_del_ioc_rr(fiopsd, ioc);
 }
 
-static int fiops_allow_merge(struct request_queue *q, struct request *rq,
+static int fiops_allow_bio_merge(struct request_queue *q, struct request *rq,
 			   struct bio *bio)
 {
 	struct fiops_data *fiopsd = q->elevator->elevator_data;
@@ -592,6 +590,12 @@ static int fiops_allow_merge(struct request_queue *q, struct request *rq,
 	cic = fiops_cic_lookup(fiopsd, current->io_context);
 
 	return cic == RQ_CIC(rq);
+}
+
+static int fiops_allow_rq_merge(struct request_queue *q, struct request *rq,
+			      struct request *next)
+{
+	return RQ_CIC(rq) == RQ_CIC(next);
 }
 
 static void fiops_exit_queue(struct elevator_queue *e)
@@ -729,7 +733,8 @@ static struct elevator_type iosched_fiops = {
 		.elevator_merge_fn =		fiops_merge,
 		.elevator_merged_fn =		fiops_merged_request,
 		.elevator_merge_req_fn =	fiops_merged_requests,
-		.elevator_allow_merge_fn =	fiops_allow_merge,
+		.elevator_allow_bio_merge_fn =	fiops_allow_bio_merge,
+		.elevator_allow_rq_merge_fn =	fiops_allow_rq_merge,
 		.elevator_dispatch_fn =		fiops_dispatch_requests,
 		.elevator_add_req_fn =		fiops_insert_request,
 		.elevator_completed_req_fn =	fiops_completed_request,
@@ -762,3 +767,4 @@ module_exit(fiops_exit);
 MODULE_AUTHOR("Jens Axboe, Shaohua Li <shli@kernel.org>");
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("IOPS based IO scheduler");
+
