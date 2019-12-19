@@ -64,7 +64,7 @@ static DEFINE_MUTEX(thermal_governor_lock);
 #define BOUNDED_CPU		1
 static void start_poll_queue(struct thermal_zone_device *tz, int delay)
 {
-	mod_delayed_work_on(tz->poll_queue_cpu, system_freezable_wq, &tz->poll_queue,
+	mod_delayed_work_on(tz->poll_queue_cpu, system_freezable_power_efficient_wq, &tz->poll_queue,
 			msecs_to_jiffies(delay));
 }
 #endif
@@ -344,14 +344,14 @@ static void thermal_zone_device_set_polling(struct thermal_zone_device *tz,
 #ifdef CONFIG_SCHED_MC
 		start_poll_queue(tz, delay);
 #else
-		mod_delayed_work(system_freezable_wq, &tz->poll_queue,
+		mod_delayed_work(system_freezable_power_efficient_wq, &tz->poll_queue,
 				 round_jiffies(msecs_to_jiffies(delay)));
 #endif
 	else if (delay)
 #ifdef CONFIG_SCHED_MC
 		start_poll_queue(tz, delay);
 #else
-		mod_delayed_work(system_freezable_wq, &tz->poll_queue,
+		mod_delayed_work(system_freezable_power_efficient_wq, &tz->poll_queue,
 				 msecs_to_jiffies(delay));
 #endif
 	else
@@ -1663,7 +1663,7 @@ struct thermal_zone_device *thermal_zone_device_register(const char *type,
 	/* Bind cooling devices for this zone */
 	bind_tz(tz);
 
-	INIT_DELAYED_WORK(&(tz->poll_queue), thermal_zone_device_check);
+	INIT_DEFERRABLE_WORK(&(tz->poll_queue), thermal_zone_device_check);
 
 	if (!tz->ops->get_temp)
 		thermal_zone_device_set_polling(tz, 0);
