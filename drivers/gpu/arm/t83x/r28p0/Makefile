@@ -30,6 +30,9 @@ ifeq ($(CONFIG_MALI_FPGA_BUS_LOGGER),y)
 EXTRA_SYMBOLS += $(BUSLOG_PATH_RELATIVE)/drivers/base/bus_logger/Module.symvers
 endif
 
+ccflags-y += $(call cc-option, -funroll-loops,)
+ccflags-y += $(call cc-option, -ffast-math,)
+
 # we get the symbols from modules using KBUILD_EXTRA_SYMBOLS to prevent warnings about unknown functions
 all:
 	$(MAKE) -C $(KDIR) M=$(CURDIR) EXTRA_CFLAGS="-I$(CURDIR)/../../../../include -I$(CURDIR)/../../../../tests/include $(SCONS_CFLAGS)" $(SCONS_CONFIGS) KBUILD_EXTRA_SYMBOLS="$(EXTRA_SYMBOLS)" modules
