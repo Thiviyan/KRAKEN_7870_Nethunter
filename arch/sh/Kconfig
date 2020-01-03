@@ -698,6 +698,7 @@ config NR_CPUS
 
 config HOTPLUG_CPU
 	bool "Support for hot-pluggable CPUs (EXPERIMENTAL)"
+	default n
 	depends on SMP
 	help
 	  Say Y here to experiment with turning CPUs off and on.  CPUs
