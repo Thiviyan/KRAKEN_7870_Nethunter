@@ -47,6 +47,7 @@
 
 #define CONFIG_DYNAMIC_MODE_SUPPORT
 //#define CONFIG_DYNAMIC_MODE_SUPPORT_DEBUG
+// bool screen_on;
 
 struct cpufreq_thunderstorm_cpuinfo {
 	struct timer_list cpu_timer;
@@ -547,6 +548,17 @@ static void cpufreq_thunderstorm_timer(unsigned long data)
 				pcpu->policy->cur < tunables->hispeed_freq)
 			new_freq = tunables->hispeed_freq;
 	}
+
+/*	if (screen_on
+		&& tunables->timer_rate != tunables->prev_timer_rate)
+		tunables->timer_rate = tunables->prev_timer_rate;
+	else if (!screen_on
+		&& tunables->timer_rate != SCREEN_OFF_TIMER_RATE) {
+		tunables->prev_timer_rate = tunables->timer_rate;
+		tunables->timer_rate
+			= max(tunables->timer_rate,
+				SCREEN_OFF_TIMER_RATE);
+	} */ /* disabled screen on */
 
 	if (cpufreq_frequency_table_target(pcpu->policy, pcpu->freq_table,
 					   new_freq, CPUFREQ_RELATION_L,
@@ -3237,6 +3249,7 @@ static int __init cpufreq_thunderstorm_init(void)
 {
 	unsigned int i;
 	struct cpufreq_thunderstorm_cpuinfo *pcpu;
+//	screen_on = true;
 
 	/* Initalize per-cpu timers */
 	for_each_possible_cpu(i) {
