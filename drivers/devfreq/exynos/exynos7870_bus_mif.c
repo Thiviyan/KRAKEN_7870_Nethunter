@@ -34,7 +34,7 @@
 #include "../governor.h"
 
 #define DEVFREQ_MIF_REBOOT_FREQ	(902000)
-#define DEVFREQ_MIF_SWITCH_FREQ	(667000)
+#define DEVFREQ_MIF_SWITCH_FREQ	(902000)
 
 u32 sw_volt_table;
 
