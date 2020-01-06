@@ -12,6 +12,8 @@
 #include <linux/export.h>
 #include <linux/module.h>
 #include <linux/state_notifier.h>
+#include <linux/mutex.h>
+#include "../../../kernel/power/power.h"
 
 #define DEFAULT_SUSPEND_DEFER_TIME 	10
 #define STATE_NOTIFIER			"state_notifier"
@@ -98,6 +100,16 @@ void state_suspend(void)
 
 	queue_delayed_work_on(0, susp_wq, &suspend_work, 
 		msecs_to_jiffies(suspend_defer_time * 1000));
+
+
+	if (unlikely(!mutex_trylock(&pm_mutex))) {
+	pr_info("PM is busy. Skipping suspension\n");
+	return;
+	}
+
+	pr_info("state_notifier: calling system suspension\n");
+	pm_suspend(PM_HIBERNATION_PREPARE);
+	mutex_unlock(&pm_mutex);
 }
 
 void state_resume(void)
