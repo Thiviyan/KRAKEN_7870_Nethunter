@@ -268,6 +268,8 @@ f_midi_complete(struct usb_ep *ep, struct usb_request *req)
 				req->actual, req->length);
 		if (ep == midi->out_ep)
 			f_midi_handle_out_data(ep, req);
+
+		free_ep_req(ep, req);
 		return;
 
 	case -EOVERFLOW:	/* buffer overrun on read means that
@@ -558,6 +560,8 @@ static void f_midi_transmit(struct f_midi *midi, struct usb_request *req)
 
 	if (req->length > 0)
 		usb_ep_queue(ep, req, GFP_ATOMIC);
+	else
+		free_ep_req(ep, req);
 }
 
 static void f_midi_in_tasklet(unsigned long data)
