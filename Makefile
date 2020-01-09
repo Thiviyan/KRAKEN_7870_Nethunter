@@ -406,7 +406,7 @@ LINUXINCLUDE    := \
 
 KBUILD_CPPFLAGS := -D__KERNEL__
 
-KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
+KBUILD_CFLAGS   := -Wstrict-prototypes -Wno-trigraphs \
 		   -w \
 		   -fno-strict-aliasing -fno-common \
 		   -Wno-format-security \
