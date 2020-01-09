@@ -471,6 +471,9 @@ void cpufreq_unregister_governor(struct cpufreq_governor *governor);
 #ifdef CONFIG_CPU_FREQ_GOV_PERFORMANCE
 extern struct cpufreq_governor cpufreq_gov_performance;
 #endif
+#ifdef CONFIG_CPU_FREQ_GOV_THUNDERSTORM
+extern unsigned int cpufreq_thunderstorm_get_hispeed_freq(int cpu);
+#endif
 #ifdef CONFIG_CPU_FREQ_GOV_INTERACTIVE
 extern unsigned int cpufreq_interactive_get_hispeed_freq(int cpu);
 #endif
@@ -491,6 +494,9 @@ extern struct cpufreq_governor cpufreq_gov_conservative;
 #elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_INTERACTIVE)
 extern struct cpufreq_governor cpufreq_gov_interactive;
 #define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_interactive)
+#elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_THUNDERSTORM)
+extern struct cpufreq_governor cpufreq_gov_thunderstorm;
+#define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_thunderstorm)
 #endif
 
 /*********************************************************************
