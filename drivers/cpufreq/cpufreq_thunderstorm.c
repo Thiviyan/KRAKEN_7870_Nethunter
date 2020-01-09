@@ -1305,7 +1305,7 @@ static ssize_t store_mode(struct cpufreq_thunderstorm_tunables
 	int ret;
 	long unsigned int val;
 
-	ret = strict_strtoul(buf, 0, &val);
+	ret = kstrtoul(buf, 0, &val);
 	if (ret < 0)
 		return ret;
 
@@ -1329,7 +1329,7 @@ static ssize_t store_param_index(struct cpufreq_thunderstorm_tunables
 	long unsigned int val;
 	unsigned long flags;
 
-	ret = strict_strtoul(buf, 0, &val);
+	ret = kstrtoul(buf, 0, &val);
 	if (ret < 0)
 		return ret;
 
