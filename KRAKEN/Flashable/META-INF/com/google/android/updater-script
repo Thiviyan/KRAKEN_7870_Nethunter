@@ -1,0 +1,76 @@
+run_program("/sbin/busybox", "mount", "/system");
+run_program("/sbin/busybox", "mount", "/data");
+ui_print("***********************");
+ui_print(" You are currently flashing PROJECT-BUTTER X ");
+ui_print(" by @SPARTANICUS XDA-Developers ");
+ui_print(" ");
+ui_print(" ");
+ui_print(" This might take a couple of minutes ");
+run_program("/sbin/mount", "-t", "auto", "/system");
+run_program("/sbin/mount", "-t", "auto", "/vendor");
+run_program("/sbin/mount", "-t", "auto", "/data");
+delete_recursive("/system/container");
+delete_recursive("/system/preloadedsso");
+delete_recursive("/system/etc/secure_storage/com.sec.knox.store");
+delete_recursive("/system/app/KnoxAppsUpdateAgent");
+delete_recursive("/system/app/KnoxAttestationAgent");
+delete_recursive("/system/app/KnoxFolderContainer2");
+delete_recursive("/system/app/KnoxRemoteContentsProvider");
+delete_recursive("/system/app/KnoxSetupWizardClient");
+delete_recursive("/system/app/KnoxSwitcher");
+delete_recursive("/system/app/SecureFolderSetupPage");
+delete_recursive("/system/app/Bridge");
+delete_recursive("/system/app/ELMAgent");
+delete_recursive("/system/app/RCPComponents");
+delete_recursive("/system/app/SecurityLogAgent");
+delete_recursive("/system/app/UniversalMDMClient");
+delete_recursive("/system/app/SwitchKnoxI");
+delete_recursive("/system/app/SwitchKnoxII");
+delete_recursive("/system/app/KnoxFolderContainer");
+delete_recursive("/system/app/Rlc");
+delete_recursive("/system/priv-app/Rlc");
+delete_recursive("/system/priv-app/KnoxCore");
+delete_recursive("/system/priv-app/KnoxGuard");
+delete_recursive("/system/priv-app/KLMSAgent");
+delete_recursive("/system/priv-app/SPDClient");
+delete("/system/lib/libvkservice.so");
+delete("/system/lib/libvkjni.so");
+ui_print(" Butterizing process has started... ");
+ui_print("@ Detecting phone variant...");
+if is_substring("A320", getprop("ro.boot.bootloader")) then
+    ui_print("@ A3 2017 detected, extracting files...");
+    package_extract_file("KRAKEN/device/a3y17lte/boot.img", "/dev/block/platform/13540000.dwmmc0/by-name/BOOT");
+endif;
+if is_substring("J530", getprop("ro.boot.bootloader")) then
+    ui_print("@ J530 2017 detected, extracting files...");
+    package_extract_file("KRAKEN/device/j5y17lte/boot.img", "/dev/block/platform/13540000.dwmmc0/by-name/BOOT");
+endif;
+if is_substring("J730", getprop("ro.boot.bootloader")) then
+    ui_print("@ J7 2017 detected, extracting files...");
+    package_extract_file("KRAKEN/device/j7y17lte/boot.img", "/dev/block/platform/13540000.dwmmc0/by-name/BOOT");
+endif;
+if is_substring("G610", getprop("ro.boot.bootloader")) then
+    ui_print("@ J7 Prime detected, extracting files...");
+    package_extract_file("KRAKEN/device/on7xelte/boot.img", "/dev/block/platform/13540000.dwmmc0/by-name/BOOT");
+endif;
+if is_substring("J710", getprop("ro.boot.bootloader")) then
+    ui_print("@ J7 2016 detected, extracting files...");
+    package_extract_file("KRAKEN/device/j7xelte/boot.img", "/dev/block/platform/13540000.dwmmc0/by-name/BOOT");
+endif;
+if is_substring("J701", getprop("ro.boot.bootloader")) then
+    ui_print("@ J7 NXT detected, extracting files...");
+    package_extract_file("KRAKEN/device/j7velte/boot.img", "/dev/block/platform/13540000.dwmmc0/by-name/BOOT");
+endif;
+if is_substring("J600", getprop("ro.boot.bootloader")) then
+    ui_print("@ J6 2018 detected, extracting files...");
+    package_extract_file("KRAKEN/device/j6lte/boot.img", "/dev/block/platform/13540000.dwmmc0/by-name/BOOT");
+endif;
+if is_substring("A600", getprop("ro.boot.bootloader")) then
+    ui_print("@ A6 2018 detected, extracting files...");
+    package_extract_file("KRAKEN/device/a6lte/boot.img", "/dev/block/platform/13540000.dwmmc0/by-name/BOOT");
+endif;
+package_extract_dir("KRAKEN/system", "/system");
+package_extract_dir("KRAKEN/vendor", "/vendor");
+unmount("/system");
+ui_print(" Butterizing process was fully executed. ");
+ui_print(" Reboot and enjoy your brand new experience! ");

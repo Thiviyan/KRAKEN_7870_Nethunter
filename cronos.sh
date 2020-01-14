@@ -1,6 +1,6 @@
   #!/bin/bash
 #
-# Cronos Build Script V4.1
+# KRAKEN Build Script V4.1
 # For Exynos7870
 # Coded by BlackMesa/AnanJaser1211 @2019
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,21 +26,21 @@ CR_DTS_TREBLE=arch/arm64/boot/exynos7870_Treble.dtsi
 CR_DTS_ONEUI=arch/arm64/boot/exynos7870_Oneui.dtsi
 CR_DTS_X6LTE=arch/arm64/boot/exynos7870_x6lte.dtsi
 # Define boot.img out dir
-CR_OUT=$CR_DIR/Cronos/Out
-CR_PRODUCT=$CR_DIR/Cronos/Product
+CR_OUT=$CR_DIR/KRAKEN/Out
+CR_PRODUCT=$CR_DIR/KRAKEN/Product
 # Presistant A.I.K Location
-CR_AIK=$CR_DIR/Cronos/A.I.K
+CR_AIK=$CR_DIR/KRAKEN/A.I.K
 # Main Ramdisk Location
-CR_RAMDISK_ONEUI=$CR_DIR/Cronos/Oneui
-CR_RAMDISK_PORT=$CR_DIR/Cronos/Treble_unofficial
-CR_RAMDISK_TREBLE=$CR_DIR/Cronos/Treble_official
+CR_RAMDISK_ONEUI=$CR_DIR/KRAKEN/Oneui
+CR_RAMDISK_PORT=$CR_DIR/KRAKEN/Treble_unofficial
+CR_RAMDISK_TREBLE=$CR_DIR/KRAKEN/Treble_official
 # Compiled image name and location (Image/zImage)
 CR_KERNEL=$CR_DIR/arch/arm64/boot/Image
 # Compiled dtb by dtbtool
 CR_DTB=$CR_DIR/boot.img-dtb
 # Kernel Name and Version
-CR_VERSION=V5.0
-CR_NAME=CronosKernel
+CR_VERSION=RC5
+CR_NAME=KRAKEN-Kernel
 # Thread count
 CR_JOBS=$(nproc --all)
 # Target android version and platform (7/n/8/o/9/p)
@@ -96,13 +96,12 @@ CR_VARIANT_A600X=A600X
 CR_CONFIG_TREBLE=treble_defconfig
 CR_CONFIG_ONEUI=oneui_defconfig
 CR_CONFIG_SPLIT=NULL
-CR_CONFIG_HELIOS=helios_defconfig
+CR_CONFIG_KRAKEN=KRAKEN_defconfig
 # Flashable Variables
 FL_MODEL=NULL
 FL_VARIANT=NULL
-FL_DIR=$CR_DIR/Cronos/Flashable
-FL_EXPORT=$CR_DIR/Cronos/Flashable_OUT
-FL_MAGISK=$FL_EXPORT/Helios/magisk/magisk.zip
+FL_DIR=$CR_DIR/KRAKEN/Flashable
+FL_EXPORT=$CR_DIR/KRAKEN/Flashable_OUT
 FL_SCRIPT=$FL_EXPORT/META-INF/com/google/android/updater-script
 #####################################################
 
@@ -246,8 +245,8 @@ BUILD_GENERATE_CONFIG()
     echo " Copy $CR_CONFIG_USB "
     cat $CR_DIR/arch/$CR_ARCH/configs/$CR_CONFIG_USB >> $CR_DIR/arch/$CR_ARCH/configs/tmp_defconfig
   fi
-  echo " Copy $CR_CONFIG_HELIOS "
-  cat $CR_DIR/arch/$CR_ARCH/configs/$CR_CONFIG_HELIOS >> $CR_DIR/arch/$CR_ARCH/configs/tmp_defconfig
+  echo " Copy $CR_CONFIG_KRAKEN "
+  cat $CR_DIR/arch/$CR_ARCH/configs/$CR_CONFIG_KRAKEN >> $CR_DIR/arch/$CR_ARCH/configs/tmp_defconfig
   echo " Set $CR_VARIANT to generated config "
   CR_CONFIG=tmp_defconfig
 }
@@ -344,7 +343,7 @@ PACK_FLASHABLE()
 	echo " Target device : $CR_VARIANT "
   echo " Target image $CR_OUT/$CR_IMAGE_NAME.img "
   echo " Prepare Temporary Dirs"
-  FL_DEVICE=$FL_EXPORT/Helios/device/$FL_MODEL/boot.img
+  FL_DEVICE=$FL_EXPORT/KRAKEN/device/$FL_MODEL/boot.img
   echo " Copy $FL_DIR to $FL_EXPORT"
   rm -rf $FL_EXPORT
   mkdir $FL_EXPORT
