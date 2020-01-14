@@ -19,7 +19,7 @@
 # Main Dir
 CR_DIR=$(pwd)
 # Define toolchan path
-CR_TC=~/Android/Toolchains/linaro-7.4.1-aarch64-linux/bin/aarch64-linux-gnu-
+CR_TC=~/Android/Toolchains/linaro-7.5.0-aarch64-linux/bin/aarch64-linux-gnu-
 # Define proper arch and dir for dts files
 CR_DTS=arch/arm64/boot/dts
 CR_DTS_TREBLE=arch/arm64/boot/exynos7870_Treble.dtsi
@@ -39,7 +39,7 @@ CR_KERNEL=$CR_DIR/arch/arm64/boot/Image
 # Compiled dtb by dtbtool
 CR_DTB=$CR_DIR/boot.img-dtb
 # Kernel Name and Version
-CR_VERSION=RC5
+CR_VERSION=RC6
 CR_NAME=KRAKEN-Kernel
 # Thread count
 CR_JOBS=$(nproc --all)

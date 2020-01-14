@@ -93,11 +93,11 @@ signing_key.x509
 x509.genkey
 
 #
-# Cronos
+# KRAKEN
 #
-Cronos/A.I.K/*
-Cronos/Out/*.img
-Cronos/TWRP/
+KRAKEN/A.I.K/*
+KRAKEN/Out/*.img
+KRAKEN/TWRP/
 *.lds
 *.fw*
 *.bin*
@@ -162,9 +162,9 @@ security/samsung/defex_lsm/pack_rules
 p
 p-
 arch/arm64/configs/tmp_defconfig
-Cronos/Out/*.zip
-Cronos/Out/*.img
-Cronos/Product/*.img
-Cronos/Product/*.zip
+KRAKEN/Out/*.zip
+KRAKEN/Out/*.img
+KRAKEN/Product/*.img
+KRAKEN/Product/*.zip
 arch/arm64/boot/dts/*.dtb
 arch/arm64/boot/dts/exynos7870.dtsi
