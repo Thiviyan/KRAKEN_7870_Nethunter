@@ -493,6 +493,9 @@
 
 		/* For CPUFREQ table */
 		/* CL0 */
+		/* Booting value */
+		boot_info = <40 1690000>;
+		/* boot_qos_timeout, boot_freq */
 		cl0_idx_num = <17>;
 		cl0_max_support_idx = <3>;
 		cl0_min_support_idx = <16>;
