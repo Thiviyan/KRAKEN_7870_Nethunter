@@ -126,25 +126,8 @@ echo "0-7" > /dev/cpuset/top-app/cpus
 echo "0-2" > /dev/cpuset/system-background/cpus
 echo "0-3" > /dev/cpuset/restricted/cpus
 
-# Optimize the Mali-T830 MP1 GPU into delivering better overall graphical rendering performance.
-echo "1001" > /sys/devices/11400000.mali/max_clock
-echo "343" > /sys/devices/11400000.mali/min_clock
-echo "booster" > /sys/devices/11400000.mali/dvfs_governor
-echo "coarse_demand" > /sys/devices/11400000.mali/power_policy 
-echo "1" > /sys/devices/14ac0000.mali/core_mask
+# Optimize the Mali-T830 MP1 GPU into delivering better overall graphical rendering performance
 echo "60" > /sys/devices/platform/gpusysfs/fps
-echo "1" > /sys/devices/14ac0000.mali/tmu
-echo "1" > /sys/devices/14ac0000.mali/core_mask
-
-# Optimize the Mali-T830 MP1 DVFS driver.
-echo "off" > /sys/devices/11400000.mali/dvfs
-echo "off" > /sys/devices/11400000.mali/dvfs_max_lock
-echo "off" > /sys/devices/11400000.mali/dvfs_max_lock_status
-echo "off" > /sys/devices/11400000.mali/dvfs_min_lock
-echo "off" > /sys/devices/11400000.mali/dvfs_min_lock_status
-echo "off" > /sys/devices/11400000.mali/dvfs_period
-echo "off" > /sys/devices/11400000.mali/dvfs_table
-echo "off" > /sys/devices/11400000.mali/core_availability_policy
 
 # Tweak the readahead KB for sde and sdf io scheds
 echo "1028" > /sys/block/sde/queue/read_ahead_kb
