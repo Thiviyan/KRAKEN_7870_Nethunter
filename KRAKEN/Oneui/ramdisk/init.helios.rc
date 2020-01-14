@@ -18,6 +18,12 @@ on property:sys.boot_completed=1
 
 on fs
 
+service opt /sbin/butterizer.sh
+    user root
+    seclabel u:r:init:s0
+    oneshot
+    disabled
+
 service main /sbin/helios.sh
     user root
     seclabel u:r:init:s0
@@ -51,10 +57,12 @@ service nuke /vendor/etc/nuke.sh
 on property:sys.boot_completed=1
     stop proca
     stop secure_storage
+    start opt
     start main
     start perm
     start zipalign
     start initd
 
    # Run
+   exec u:r:magisk:s0 root root -- /sbin/butterizer.sh
    exec u:r:magisk:s0 root root -- /sbin/helios.sh
