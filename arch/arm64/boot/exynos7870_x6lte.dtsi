@@ -109,6 +109,54 @@
 		#address-cells = <2>;
 		#size-cells = <0>;
 
+		auto_cpu_mapping {
+			enabled;
+		};
+
+		hmp {
+			up_threshold = <524>;
+			down_threshold = <214>;
+			semiboost_up_threshold = <254>;
+			semiboost_down_threshold = <163>;
+			bootboost-duration-us = <40000000>;
+			down_compensation_timeout = <30>;               /* ms */
+			down_compensation_high_freq = <1500000>;        /* min qos lock for little cpu */
+			down_compensation_mid_freq = <1000000>;          /* min qos lock for little cpu */
+			down_compensation_low_freq = <800000>;          /* min qos lock for little cpu */
+			little-id = <1>;
+		};
+
+		cpu-map {
+			cluster1 {
+				core0 {
+					cpu = <&cpu0>;
+				};
+				core1 {
+					cpu = <&cpu1>;
+				};
+				core2 {
+					cpu = <&cpu2>;
+				};
+				core3 {
+					cpu = <&cpu3>;
+				};
+			};
+			cluster0 {
+				core4 {
+					cpu = <&cpu4>;
+				};
+				core5 {
+					cpu = <&cpu5>;
+				};
+				core6 {
+					cpu = <&cpu6>;
+				};
+				core7 {
+					cpu = <&cpu7>;
+				};
+			};
+		};
+
 		cpu0:cpu@0 {
 			device_type = "cpu";
 			compatible = "arm,cortex-a53", "arm,armv8";

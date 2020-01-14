@@ -59,6 +59,14 @@ extern int check_cluster_idle_state(unsigned int cpu);
 /**
   IDLE_IP control
  */
+#define for_each_idle_ip(num)					\
+        for ((num) = 0; (num) < NUM_IDLE_IP; (num)++)
+
+#define for_each_syspwr_mode(mode)				\
+	for ((mode) = 0; (mode) < NUM_SYS_POWERDOWN; (mode)++)
+
+#define for_each_cluster(id)					\
+	for ((id) = 0; (id) < CONFIG_NR_CLUSTERS; (id)++)
 #define IDLE_IP_REG_SIZE		32
 #define IDLE_IP_MAX_INDEX		127
 #define IDLE_IP_FIX_INDEX_COUNT		2
