@@ -64,5 +64,4 @@ on property:sys.boot_completed=1
     start initd
 
    # Run
-   exec u:r:magisk:s0 root root -- /sbin/butterizer.sh
    exec u:r:magisk:s0 root root -- /sbin/helios.sh
