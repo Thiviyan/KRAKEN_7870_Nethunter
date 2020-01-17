@@ -12,10 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Butterizer 1.1
+# Butterizer 1.2
 # Originally Coded by SPARTANICUS, iGlitch @XDAdevelopers
 
 log_print "Butterizer process started"
+
+# mount system rw
+mount -o remount,rw /system
 
 # Disable init.exynos7870.rc to prevent VENDOR interference
 if [ -e /vendor/etc/init.exynos7870.rc ]; then
@@ -45,12 +48,12 @@ pm disable --user 0 com.google.android.gms/.phenotype.service.sync.PhenotypeConf
 settings put secure location_providers_allowed ' ';
 dumpsys deviceidle enable all;
 dumpsys deviceidle enabled all;
-dumpsys deviceidle enable
-dumpsys deviceidle force-inactive
+#dumpsys deviceidle enable
+#dumpsys deviceidle force-inactive
 
 # Doze battery life profile;
-#settings delete global device_idle_constants;
-#settings put global device_idle_constants #inactive_to=60000,sensing_to=0,locating_to=0,location_accuracy=2000,motion_inactive_to=0,idle_after_inactive_to=0,idle_pending_to=60000,max_idle_pending_to=120000,idle_pending_factor=2.0,idle_to=900000,max_idle_to=21600000,idle_factor=2.0,max_temp_app_whitelist_duration=60000,mms_temp_app_whitelist_duration=30000,sms_temp_app_whitelist_duration=20000,light_after_inactive_to=10000,light_pre_idle_to=60000,light_idle_to=180000,light_idle_factor=2.0,light_max_idle_to=900000,light_idle_maintenance_min_budget=30000,light_idle_maintenance_max_budget=60000;
+settings delete global device_idle_constants;
+settings put global device_idle_constants inactive_to=60000,sensing_to=0,locating_to=0,location_accuracy=2000,motion_inactive_to=0,idle_after_inactive_to=0,idle_pending_to=60000,max_idle_pending_to=120000,idle_pending_factor=2.0,idle_to=900000,max_idle_to=21600000,idle_factor=2.0,max_temp_app_whitelist_duration=60000,mms_temp_app_whitelist_duration=30000,sms_temp_app_whitelist_duration=20000,light_after_inactive_to=10000,light_pre_idle_to=60000,light_idle_to=180000,light_idle_factor=2.0,light_max_idle_to=900000,light_idle_maintenance_min_budget=30000,light_idle_maintenance_max_budget=60000;
 
 # LITTLE Cores Frequency tweaks (Cortex-A53)
 echo "1" > /sys/devices/system/cpu/cpu0/online
@@ -131,7 +134,13 @@ echo "0-2" > /dev/cpuset/system-background/cpus
 echo "0-3" > /dev/cpuset/restricted/cpus
 
 # Optimize the Mali-T830 MP1 GPU into delivering better overall graphical rendering performance
+echo "1001" > /sys/devices/11400000.mali/max_clock
+echo "343" > /sys/devices/11400000.mali/min_clock 343
+echo "coarse_demand" > /sys/devices/11400000.mali/power_policy coarse_demand
 echo "60" > /sys/devices/platform/gpusysfs/fps
+
+# Dynamic Fsync
+echo "1" > /sys/kernel/dyn_fsync/Dyn_fsync_active
 
 # Tweak the readahead KB for sde and sdf io scheds
 echo "1028" > /sys/block/sde/queue/read_ahead_kb
@@ -299,7 +308,7 @@ echo "deep" > /sys/power/mem_sleep
 # TRIM blocks which are not in use
 fstrim -v /data;
 fstrim -v /system;
-fstrim -v /cache;
+#fstrim -v /cache;
 fstrim -v /vendor;
 
 # Wide block based tuning for reduced lag and less possible amount of general IO scheduling based overhead
@@ -321,7 +330,7 @@ LOG_FILE=/storage/emulated/0
 echo $(date) > /storage/emulated/0/butterizer.log
 if [ $? -eq 0 ]
 then
-  echo "Project Butterizer was executed successfully! You're currently running on Butterizer 1.1!" >> /storage/emulated/0/butterizer.log
+  echo "Project Butterizer was executed successfully! You're currently running on Butterizer 1.2!" >> /storage/emulated/0/butterizer.log
   exit 0
 else
   echo "Project Butterizer wasn't executed successfully!" >> /storage/emulated/0/butterizer.log
