@@ -36,6 +36,10 @@
 #define EN_TEST_READ 1
 #endif
 
+#ifdef CONFIG_USB_HOST_NOTIFY
+#include <linux/usb_notify.h>
+#endif
+
 struct s2mu005_charger_data {
 	struct i2c_client       *client;
 	struct device *dev;

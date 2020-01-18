@@ -35,6 +35,10 @@
 #define ENABLE 1
 #define DISABLE 0
 
+#ifdef CONFIG_USB_HOST_NOTIFY
+#include <linux/usb_notify.h>
+#endif
+
 struct s2mu005_charger_data {
 	struct i2c_client       *client;
 	struct device *dev;
