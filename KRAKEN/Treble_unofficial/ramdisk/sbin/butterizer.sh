@@ -91,9 +91,9 @@ echo "80 343000:95 449000:90 546000:85 676000:85 757000:80 839000:80 902000:75 1
 #echo "80000" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/boostpulse_duration
 #echo "74 757000:80 839000:77 902000:75 1014000:70 1144000:65 1248000:62 1352000:65 1482000:60 1586000:45 1690000:20" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads
 
-# Battery oriented HMP profile;
-echo "700" > /sys/kernel/hmp/up_threshold
-echo "256" > /sys/kernel/hmp/down_threshold
+# Performance oriented HMP profile;
+echo "430" > /sys/kernel/hmp/up_threshold
+echo "150" > /sys/kernel/hmp/down_threshold
 
 # A custom CPUSet profile;
 echo "0-2,4-7" > /dev/cpuset/foreground/cpus
@@ -103,7 +103,7 @@ echo "0-2" > /dev/cpuset/system-background/cpus
 echo "0-3" > /dev/cpuset/restricted/cpus
 
 # Mali-T830 MP1 optimization into delivering better overall graphical rendering performance combined with great UI experience and battery savings;
-echo "1001" > /sys/devices/11400000.mali/max_clock
+echo "1246" > /sys/devices/11400000.mali/max_clock
 echo "343" > /sys/devices/11400000.mali/min_clock 343
 echo "coarse_demand" > /sys/devices/11400000.mali/power_policy coarse_demand
 echo "60" > /sys/devices/platform/gpusysfs/fps
