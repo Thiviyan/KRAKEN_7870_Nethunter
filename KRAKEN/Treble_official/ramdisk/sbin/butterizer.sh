@@ -12,13 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Butterizer 1.3
+# Butterizer 1.4
 # Originally Coded by SPARTANICUS, iGlitch @XDAdevelopers
 
 log_print "Butterizer process started"
 
 # mount system as rw;
 mount -o remount,rw /system
+
+# boost mali max clock before tuning it down
+echo "1246" > /sys/devices/11400000.mali/max_clock
 
 # Disable init.exynos7870.rc to prevent VENDOR interference;
 if [ -e /vendor/etc/init.exynos7870.rc ]; then
@@ -29,23 +32,36 @@ fi;
 
 # Frequency tweaks;
 echo "1" > /sys/devices/system/cpu/cpu0/online
-echo "thunderstorm" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo "interactives9" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 echo "343000" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
 echo "1690000" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 # Governor values;
-echo "0" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/above_hispeed_delay
-echo "1" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/boost
-echo "1" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/boostpulse
-echo "60000" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/boostpulse_duration
-echo "343000" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/down_low_load_threshold
-echo "75" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/go_hispeed_load
-echo "343000" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/hispeed_freq
-echo "0" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/io_is_busy
-echo "50000" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/min_sample_time
+echo "0" > /sys/devices/system/cpu/cpu0/cpufreq/interactives9/above_hispeed_delay
+echo "1" > /sys/devices/system/cpu/cpu0/cpufreq/interactives9/boost
+echo "1" > /sys/devices/system/cpu/cpu0/cpufreq/interactives9/boostpulse
+echo "60000" > /sys/devices/system/cpu/cpu0/cpufreq/interactives9/boostpulse_duration
+echo "343000" > /sys/devices/system/cpu/cpu0/cpufreq/interactives9/down_low_load_threshold
+echo "75" > /sys/devices/system/cpu/cpu0/cpufreq/interactives9/go_hispeed_load
+echo "343000" > /sys/devices/system/cpu/cpu0/cpufreq/interactives9/hispeed_freq
+echo "0" > /sys/devices/system/cpu/cpu0/cpufreq/interactives9/io_is_busy
+echo "50000" > /sys/devices/system/cpu/cpu0/cpufreq/interactives9/min_sample_time
+echo "1" > /sys/devices/system/cpu/cpu0/cpufreq/interactives9/mode
+echo "40000" > /sys/devices/system/cpu/cpu0/cpufreq/interactives9/timer_rate
+echo "60000" > /sys/devices/system/cpu/cpu0/cpufreq/interactives9/timer_slack
+echo "80 343000:95 449000:90 546000:85 676000:85 757000:80 839000:80 902000:75 1014000:70 1144000:65 1248000:65 1352000:65 1482000:60 1586000:99 1690000:100" > /sys/devices/system/cpu/cpu0/cpufreq/interactives9/target_loads
+#echo "0" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/above_hispeed_delay
+#echo "1" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/boost
+#echo "1" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/boostpulse
+#echo "60000" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/boostpulse_duration
+#echo "343000" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/down_low_load_threshold
+#echo "75" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/go_hispeed_load
+#echo "343000" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/hispeed_freq
+#echo "0" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/io_is_busy
+#echo "50000" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/min_sample_time
 #echo "" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/mode
-echo "40000" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/timer_rate
-echo "60000" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/timer_slack
-echo "80 343000:95 449000:90 546000:85 676000:85 757000:80 839000:80 902000:75 1014000:70 1144000:65 1248000:65 1352000:65 1482000:60 1586000:99 1690000:100" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/target_loads
+#echo "40000" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/timer_rate
+#echo "60000" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/timer_slack
+#echo "80 343000:95 449000:90 546000:85 676000:85 757000:80 839000:80 902000:75 1014000:70 1144000:65 1248000:65 1352000:65 1482000:60 1586000:99 1690000:100" > /sys/devices/system/cpu/cpu0/cpufreq/thunderstorm/target_loads
 #echo "0" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
 #echo "343000" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq
 #echo "75" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
@@ -61,23 +77,36 @@ echo "80 343000:95 449000:90 546000:85 676000:85 757000:80 839000:80 902000:75 1
 
 # Frequency tweaks;
 echo "1" > /sys/devices/system/cpu/cpu4/online
-echo "thunderstorm" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+echo "interactives9" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
 echo "343000" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
 echo "1794000" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
 # Governor values;
-echo "0" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/above_hispeed_delay
-echo "1" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/boost
-echo "1" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/boostpulse
-echo "60000" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/boostpulse_duration
-echo "343000" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/down_low_load_threshold
-echo "90" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/go_hispeed_load
-echo "343000" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/hispeed_freq
-echo "0" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/io_is_busy
-echo "30000" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/min_sample_time
+echo "0" > /sys/devices/system/cpu/cpu4/cpufreq/interactives9/above_hispeed_delay
+echo "1" > /sys/devices/system/cpu/cpu4/cpufreq/interactives9/boost
+echo "1" > /sys/devices/system/cpu/cpu4/cpufreq/interactives9/boostpulse
+echo "60000" > /sys/devices/system/cpu/cpu4/cpufreq/interactives9/boostpulse_duration
+echo "343000" > /sys/devices/system/cpu/cpu4/cpufreq/interactives9/down_low_load_threshold
+echo "90" > /sys/devices/system/cpu/cpu4/cpufreq/interactives9/go_hispeed_load
+echo "343000" > /sys/devices/system/cpu/cpu4/cpufreq/interactives9/hispeed_freq
+echo "0" > /sys/devices/system/cpu/cpu4/cpufreq/interactives9/io_is_busy
+echo "30000" > /sys/devices/system/cpu/cpu4/cpufreq/interactives9/min_sample_time
+echo "1" > /sys/devices/system/cpu/cpu4/cpufreq/interactives9/mode
+echo "20000" > /sys/devices/system/cpu/cpu4/cpufreq/interactives9/timer_rate
+echo "60000" > /sys/devices/system/cpu/cpu4/cpufreq/interactives9/timer_slack
+echo "80 343000:95 449000:90 546000:85 676000:85 757000:80 839000:80 902000:75 1014000:70 1144000:65 1248000:65 1352000:65 1482000:60 1586000:45 1690000:99 1794000:100" > /sys/devices/system/cpu/cpu4/cpufreq/interactives9/target_loads
+#echo "0" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/above_hispeed_delay
+#echo "1" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/boost
+#echo "1" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/boostpulse
+#echo "60000" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/boostpulse_duration
+#echo "343000" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/down_low_load_threshold
+#echo "90" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/go_hispeed_load
+#echo "343000" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/hispeed_freq
+#echo "0" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/io_is_busy
+#echo "30000" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/min_sample_time
 #echo "" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/mode
-echo "20000" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/timer_rate
-echo "60000" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/timer_slack
-echo "80 343000:95 449000:90 546000:85 676000:85 757000:80 839000:80 902000:75 1014000:70 1144000:65 1248000:65 1352000:65 1482000:60 1586000:45 1690000:99 1794000:100" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/target_loads
+#echo "20000" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/timer_rate
+#echo "60000" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/timer_slack
+#echo "80 343000:95 449000:90 546000:85 676000:85 757000:80 839000:80 902000:75 1014000:70 1144000:65 1248000:65 1352000:65 1482000:60 1586000:45 1690000:99 1794000:100" > /sys/devices/system/cpu/cpu4/cpufreq/thunderstorm/target_loads
 #echo "0" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay
 #echo "757000" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq
 #echo "90" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load
@@ -103,7 +132,7 @@ echo "0-2" > /dev/cpuset/system-background/cpus
 echo "0-3" > /dev/cpuset/restricted/cpus
 
 # Mali-T830 MP1 optimization into delivering better overall graphical rendering performance combined with great UI experience and battery savings;
-echo "1246" > /sys/devices/11400000.mali/max_clock
+echo "1001" > /sys/devices/11400000.mali/max_clock
 echo "343" > /sys/devices/11400000.mali/min_clock 343
 echo "coarse_demand" > /sys/devices/11400000.mali/power_policy coarse_demand
 echo "60" > /sys/devices/platform/gpusysfs/fps
@@ -183,7 +212,7 @@ LOG_FILE=/storage/emulated/0
 echo $(date) > /storage/emulated/0/butterizer.log
 if [ $? -eq 0 ]
 then
-  echo "Project Butterizer was executed successfully! You're currently running on Butterizer 1.3!" >> /storage/emulated/0/butterizer.log
+  echo "Project Butterizer was executed successfully! You're currently running on Butterizer 1.4!" >> /storage/emulated/0/butterizer.log
   exit 0
 else
   echo "Project Butterizer wasn't executed successfully!" >> /storage/emulated/0/butterizer.log
