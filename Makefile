@@ -299,7 +299,7 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 
 HOSTCC       = $(CCACHE) gcc
 HOSTCXX      = $(CCACHE) g++
-HOSTCFLAGS   := -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu89 -pipe
+HOSTCFLAGS   := -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu11 -pipe
 HOSTCXXFLAGS = -O2
 
 # Decide whether to build built-in, modular, or both.
@@ -396,7 +396,7 @@ KBUILD_CFLAGS   := -Wstrict-prototypes -Wno-trigraphs -pipe \
 		   -w \
 		   -fno-strict-aliasing -fno-common \
 		   -Wno-format-security \
-		   -std=gnu89 $(call cc-option,-fno-PIE)
+		   -std=gnu11 $(call cc-option,-fno-PIE)
 
 KBUILD_CLFAGS += -floop-nest-optimize -fgraphite-identity -ftree-loop-distribution
 
@@ -704,7 +704,17 @@ KBUILD_CFLAGS += \
   -mllvm -polly-enable-simplify \
   -mllvm -polly-enable-delicm
 else
-KBUILD_CFLAGS	+= -O2 -mtune=cortex-a53 -mcpu=cortex-a53
+ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE
+KBUILD_CFLAGS	+= -O2 -mtune=cortex-a53 -mcpu=cortex-a53 -march=armv8-a
+else ifdef CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3
+KBUILD_CFLAGS	+= -O3 -mtune=cortex-a53 -mcpu=cortex-a53 -march=armv8-a
+KBUILD_CFLAGS += \
+    -finline-functions \
+    -funswitch-loops \
+    -fpredictive-commoning \
+    -ffast-math \
+    -funsafe-math-optimizations
+endif
 endif
 endif
 

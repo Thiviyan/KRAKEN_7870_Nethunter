@@ -166,7 +166,7 @@ static inline int exynos_init_asv(struct asv_common *asv_info){return 0;}
 static inline unsigned int exynos_get_table_ver(void){return 0;}
 static inline void exynos_set_ema(enum asv_type_id type, unsigned int volt){};
 static inline unsigned int exynos_get_asv_info(int id){return 0;};
-extern inline unsigned int get_sub_grp_match_asv_grp(enum asv_type_id target_type, unsigned int lv){return 0;}
+extern unsigned int get_sub_grp_match_asv_grp(enum asv_type_id target_type, unsigned int lv);
 #endif
 #if defined (CONFIG_EXYNOS_ASV_DYNAMIC_ABB)
 extern unsigned int get_match_abb(enum asv_type_id target_type, unsigned int target_freq);
