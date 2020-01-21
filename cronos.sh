@@ -42,7 +42,7 @@ CR_DTB=$CR_DIR/boot.img-dtb
 CR_VERSION=RC10
 CR_NAME=KRAKEN-Kernel
 # Thread count
-CR_JOBS=$(nproc --all)
+CR_JOBS=$(nproc --ignore=1)
 # Target android version and platform (7/n/8/o/9/p)
 CR_ANDROID=p
 CR_PLATFORM=9.0.0
