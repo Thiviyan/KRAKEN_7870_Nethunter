@@ -183,26 +183,26 @@ enum {
  * context)
  */
 /* MALI_SEC_INTEGRATION */
-#define DEFAULT_JS_SOFT_STOP_TICKS      (6) /* 100ms-200ms -> 300ms */
+#define DEFAULT_JS_SOFT_STOP_TICKS       (1) /* 100ms-200ms */
 
 /**
  * Default minimum number of scheduling ticks before CL jobs are soft-stopped.
  */
 /* MALI_SEC_INTEGRATION */
-#define DEFAULT_JS_SOFT_STOP_TICKS_CL    (6) /* 100ms-200ms -> 300ms*/
+#define DEFAULT_JS_SOFT_STOP_TICKS_CL    (1) /* 100ms-200ms */
 
 /**
  * Default minimum number of scheduling ticks before jobs are hard-stopped
  */
 /* MALI_SEC_INTEGRATION */
-#define DEFAULT_JS_HARD_STOP_TICKS_SS    (100) /* 5s */
-#define DEFAULT_JS_HARD_STOP_TICKS_SS_8408  (600) /* 30s */
+#define DEFAULT_JS_HARD_STOP_TICKS_SS    (50) /* 5s */
+#define DEFAULT_JS_HARD_STOP_TICKS_SS_8408  (300) /* 30s */
 
 /**
  * Default minimum number of scheduling ticks before CL jobs are hard-stopped.
  */
 /* MALI_SEC_INTEGRATION */
-#define DEFAULT_JS_HARD_STOP_TICKS_CL    (100) /* 5s */
+#define DEFAULT_JS_HARD_STOP_TICKS_CL    (50) /* 5s */
 
 /**
  * Default minimum number of scheduling ticks before jobs are hard-stopped
@@ -216,28 +216,28 @@ enum {
  * jobs will be cancelled.
  */
 /* MALI_SEC_INTEGRATION */
-#define DEFAULT_JS_SOFT_JOB_TIMEOUT ((u32)3000) /* 3s */
+#define DEFAULT_JS_SOFT_JOB_TIMEOUT (3000) /* 3s */
 
 /**
  * Default minimum number of scheduling ticks before the GPU is reset to clear a
  * "stuck" job
  */
 /* MALI_SEC_INTEGRATION */
-#define DEFAULT_JS_RESET_TICKS_SS           (110) /* 5.5s */
-#define DEFAULT_JS_RESET_TICKS_SS_8408     (450) /* 45s -> 22.5s */
+#define DEFAULT_JS_RESET_TICKS_SS           (55) /* 5.5s */
+#define DEFAULT_JS_RESET_TICKS_SS_8408     (450) /* 45s */
 
 /**
  * Default minimum number of scheduling ticks before the GPU is reset to clear a
  * "stuck" CL job.
  */
 /* MALI_SEC_INTEGRATION */
-#define DEFAULT_JS_RESET_TICKS_CL        (110) /* 5.5s */
+#define DEFAULT_JS_RESET_TICKS_CL        (55) /* 5.5s */
 
 /**
  * Default minimum number of scheduling ticks before the GPU is reset to clear a
  * "stuck" job during dumping.
  */
-#define DEFAULT_JS_RESET_TICKS_DUMPING   (15020) /* 1502s  -> 751s*/
+#define DEFAULT_JS_RESET_TICKS_DUMPING   (15020) /* 1502s */
 
 /**
  * Default number of milliseconds given for other jobs on the GPU to be
@@ -279,4 +279,3 @@ enum {
 #define DEFAULT_GPU_FREQ_KHZ_MAX (5000)
 
 #endif /* _KBASE_CONFIG_DEFAULTS_H_ */
-
