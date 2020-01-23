@@ -201,11 +201,11 @@ on boot
 
     # GPU dvfs node
     chown radio system /sys/devices/11400000.mali/dvfs_table
-    chmod 0664 /sys/devices/11400000.mali/dvfs_table
+    chmod 000 /sys/devices/11400000.mali/dvfs_table
     chown radio system /sys/devices/11400000.mali/dvfs_min_lock
-    chmod 0664 /sys/devices/11400000.mali/dvfs_min_lock
+    chmod 000 /sys/devices/11400000.mali/dvfs_min_lock
     chown radio system /sys/devices/11400000.mali/dvfs_max_lock
-    chmod 0664 /sys/devices/11400000.mali/dvfs_max_lock
+    chmod 000 /sys/devices/11400000.mali/dvfs_max_lock
 
     # mif, int
     chown radio system /sys/class/devfreq/17000010.devfreq_mif/min_freq
