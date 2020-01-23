@@ -20,9 +20,6 @@ log_print "Butterizer process started"
 # mount system as rw;
 mount -o remount,rw /system
 
-# boost mali max clock before tuning it down
-echo "1246" > /sys/devices/11400000.mali/max_clock
-
 # Disable init.exynos7870.rc to prevent VENDOR interference;
 if [ -e /vendor/etc/init.exynos7870.rc ]; then
   mount -o remount,rw /system;
@@ -121,8 +118,8 @@ echo "80 343000:95 449000:90 546000:85 676000:85 757000:80 839000:80 902000:75 1
 #echo "74 757000:80 839000:77 902000:75 1014000:70 1144000:65 1248000:62 1352000:65 1482000:60 1586000:45 1690000:20" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads
 
 # Performance oriented HMP profile;
-echo "430" > /sys/kernel/hmp/up_threshold
-echo "150" > /sys/kernel/hmp/down_threshold
+echo "420" > /sys/kernel/hmp/up_threshold
+echo "130" > /sys/kernel/hmp/down_threshold
 
 # A custom CPUSet profile;
 echo "0-2,4-7" > /dev/cpuset/foreground/cpus
@@ -133,8 +130,9 @@ echo "0-3" > /dev/cpuset/restricted/cpus
 
 # Mali-T830 MP1 optimization into delivering better overall graphical rendering performance combined with great UI experience and battery savings;
 echo "interactive" > /sys/devices/11400000.mali/dvfs_governor
+echo "driver" > /sys/devices/11400000.mali/core_availability_policy
 echo "coarse_demand" > /sys/devices/11400000.mali/power_policy
-echo "1001" > /sys/devices/11400000.mali/max_clock
+echo "1246" > /sys/devices/11400000.mali/max_clock
 echo "343" > /sys/devices/11400000.mali/min_clock 343
 echo "60" > /sys/devices/platform/gpusysfs/fps
 
