@@ -118,7 +118,7 @@ echo "80 343000:95 449000:90 546000:85 676000:85 757000:80 839000:80 902000:75 1
 #echo "74 757000:80 839000:77 902000:75 1014000:70 1144000:65 1248000:62 1352000:65 1482000:60 1586000:45 1690000:20" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads
 
 # Performance oriented HMP profile;
-echo "420" > /sys/kernel/hmp/up_threshold
+echo "410" > /sys/kernel/hmp/up_threshold
 echo "130" > /sys/kernel/hmp/down_threshold
 
 # A custom CPUSet profile;
@@ -211,7 +211,7 @@ LOG_FILE=/storage/emulated/0
 echo $(date) > /storage/emulated/0/butterizer.log
 if [ $? -eq 0 ]
 then
-  echo "Project Butterizer was executed successfully! You're currently running on Butterizer 1.4!" >> /storage/emulated/0/butterizer.log
+  echo "Project Butterizer was executed successfully! You're currently running on Butterizer 1.5!" >> /storage/emulated/0/butterizer.log
   exit 0
 else
   echo "Project Butterizer wasn't executed successfully!" >> /storage/emulated/0/butterizer.log
