@@ -2,26 +2,55 @@
 # AIK-Linux/unpackimg: split image and unpack ramdisk
 # osm0sis @ xda-developers
 
-cleanup() { $sudo$rmsu rm -rf ramdisk split_img *new.*; }
+cleanup() { $aik/cleanup.sh --quiet; }
 abort() { cd "$aik"; echo "Error!"; }
 
 case $1 in
-  --help) echo "usage: unpackimg.sh [--sudo] <file>"; exit 1;;
-  --sudo) sudo=sudo; sumsg=" (as root)"; shift;;
+  --help) echo "usage: unpackimg.sh [--nosudo] <file>"; exit 1;;
+  --nosudo) nosudo=1; shift;;
+  --sudo) shift;;
 esac;
+if [ ! "$nosudo" ]; then
+  sudo=sudo; sumsg=" (as root)";
+fi;
+
+case $(uname -s) in
+  Darwin|Macintosh)
+    plat="macos";
+    readlink() { perl -MCwd -e 'print Cwd::abs_path shift' "$2"; }
+  ;;
+  *) plat="linux";;
+esac;
+arch=$plat/`uname -m`;
 
 aik="${BASH_SOURCE:-$0}";
 aik="$(dirname "$(readlink -f "$aik")")";
 bin="$aik/bin";
 rel=bin;
+cur="$(readlink -f "$PWD")";
+
+case $plat in
+  macos)
+    cpio="env DYLD_LIBRARY_PATH="$bin/$arch" "$bin/$arch/cpio"";
+    statarg="-f %Su";
+    dd() { DYLD_LIBRARY_PATH="$bin/$arch" "$bin/$arch/dd" "$@"; }
+    file() { DYLD_LIBRARY_PATH="$bin/$arch" "$bin/$arch/file" "$@"; }
+    lzma() { DYLD_LIBRARY_PATH="$bin/$arch" "$bin/$arch/xz" "$@"; }
+    lzop() { DYLD_LIBRARY_PATH="$bin/$arch" "$bin/$arch/lzop" "$@"; }
+    tail() { DYLD_LIBRARY_PATH="$bin/$arch" "$bin/$arch/tail" "$@"; }
+    xz() { DYLD_LIBRARY_PATH="$bin/$arch" "$bin/$arch/xz" "$@"; }
+  ;;
+  linux)
+    cpio=cpio;
+    statarg="-c %U";
+  ;;
+esac;
 
 cd "$aik";
 chmod -R 755 "$bin" *.sh;
 chmod 644 "$bin/magic" "$bin/androidbootimg.magic" "$bin/BootSignature.jar" "$bin/avb/"* "$bin/chromeos/"*;
 
-arch=`uname -m`;
-
-img="$1";
+test -f "$cur/$1" && img="$cur/$1" || img="$1";
 if [ ! "$img" ]; then
   while IFS= read -r line; do
     case $line in
@@ -49,8 +78,8 @@ echo "Supplied image: $file";
 echo " ";
 
 if [ -d split_img -o -d ramdisk ]; then
-  if [ ! -z "$(ls ramdisk/* 2>/dev/null)" ] && [ "$(stat -c %U ramdisk/* | head -n 1)" = "root" ]; then
-    test ! "$sudo" && rmsu=sudo; rmsumsg=" (as root)";
+  if [ -d ramdisk ] && [ "$(stat $statarg ramdisk | head -n 1)" = "root" -o ! "$(find ramdisk 2>&1 | cpio -o >/dev/null 2>&1; echo $?)" -eq "0" ]; then
+    rmsumsg=" (as root)";
   fi;
   echo "Removing old work folders and files$rmsumsg...";
   echo " ";
@@ -80,6 +109,10 @@ if [ "$(echo $imgtest | awk '{ print $2 }' | cut -d, -f1)" = "signing" ]; then
     NOOK)
       dd bs=1048576 count=1 conv=notrunc if="$img" of="split_img/$file-master_boot.key" 2>/dev/null;
       dd bs=1048576 skip=1 conv=notrunc if="$img" of="split_img/$file" 2>/dev/null;
+    ;;
+    NOOKTAB)
+      dd bs=262144 count=1 conv=notrunc if="$img" of="split_img/$file-master_boot.key" 2>/dev/null;
+      dd bs=262144 skip=1 conv=notrunc if="$img" of="split_img/$file" 2>/dev/null;
     ;;
     SIN)
       "$bin/$arch/kernel_dump" split_img "$img" >/dev/null;
@@ -125,7 +158,7 @@ if [ "$(echo $imgtest | awk '{ print $3 }')" = "LOKI" ]; then
   img="$file";
 fi;
 
-tailtest="$(tail "$img" 2>/dev/null | file -m $rel/androidbootimg.magic - | cut -d: -f2-)";
+tailtest="$(tail -n50 "$img" 2>/dev/null | file -m $rel/androidbootimg.magic - | cut -d: -f2-)";
 tailtype="$(echo $tailtest | awk '{ print $1 }')";
 case $tailtype in
   AVB)
@@ -146,7 +179,13 @@ cd split_img;
 case $imgtype in
   AOSP) "$bin/$arch/unpackbootimg" -i "$img";;
   AOSP-PXA) "$bin/$arch/pxa-unpackbootimg" -i "$img";;
-  ELF) "$bin/$arch/unpackelf" -i "$img";;
+  ELF)
+    mkdir elftool_out;
+    "$bin/$arch/elftool" unpack -i "$img" -o elftool_out >/dev/null;
+    mv -f elftool_out/header "$file-header" 2>/dev/null;
+    rm -rf elftool_out;
+    "$bin/$arch/unpackelf" -i "$img";
+  ;;
   KRNL) dd bs=4096 skip=8 iflag=skip_bytes conv=notrunc if="$img" of="$file-ramdisk.cpio.gz" 2>&1 | tail -n+3 | cut -d" " -f1-2;;
   U-Boot)
     "$bin/$arch/dumpimage" -l "$img";
@@ -165,14 +204,11 @@ case $imgtype in
       abort;
       exit 1;
     fi;
-    if [ ! "$(cat "$file-type")" = "Multi" ]; then
-      echo " ";
-      echo "No ramdisk found.";
-      cleanup;
-      abort;
-      exit 1;
+    if [ "$(cat "$file-type")" = "Multi" ]; then
+      "$bin/$arch/dumpimage" -i "$img" -p 1 "$file-ramdisk.cpio.gz";
+    else
+      touch "$file-ramdisk.cpio.gz";
     fi;
-    "$bin/$arch/dumpimage" -i "$img" -p 1 "$file-ramdisk.cpio.gz";
   ;;
 esac;
 if [ ! $? -eq "0" ]; then
@@ -217,6 +253,7 @@ test "$mtk" && echo $mtktype > "$file-mtktype";
 
 if [ -f *-dtb ]; then
   dtbtest="$(file -m ../$rel/androidbootimg.magic *-dtb | cut -d: -f2 | awk '{ print $1 }')";
+  echo $dtbtest > "$file-dtbtype";
   if [ "$imgtype" = "ELF" ]; then
     case $dtbtest in
       QCDT|ELF) ;;
@@ -225,7 +262,7 @@ if [ -f *-dtb ]; then
          gzip --no-name -9 "$file-zImage";
          mv -f "$file-zImage.gz" "$file-zImage";
          cat "$file-dtb" >> "$file-zImage";
-         rm -f "$file-dtb";;
+         rm -f "$file-dtb"*;;
     esac;
   fi;
 fi;
@@ -241,6 +278,7 @@ case $ramdiskcomp in
   lzma) ;;
   bzip2) compext=bz2;;
   lz4) unpackcmd="$bin/$arch/lz4 -dcq";;
+  empty) compext=empty;;
   *) compext="";;
 esac;
 if [ "$compext" ]; then
@@ -255,22 +293,27 @@ if [ "$ramdiskcomp" = "data" ]; then
 fi;
 
 echo " ";
-echo "Unpacking ramdisk$sumsg to \"ramdisk/\"...";
-echo " ";
-cd ramdisk;
-echo "Compression used: $ramdiskcomp";
-if [ ! "$compext" ]; then
-  echo "Unsupported format.";
-  abort;
-  exit 1;
+if [ "$ramdiskcomp" = "empty" ]; then
+  echo "Warning: No ramdisk found to be unpacked!";
+else
+  echo "Unpacking ramdisk$sumsg to \"ramdisk/\"...";
+  echo " ";
+  $sudo chown 0:0 ramdisk 2>/dev/null;
+  cd ramdisk;
+  echo "Compression used: $ramdiskcomp";
+  if [ ! "$compext" ]; then
+    echo "Unsupported format.";
+    abort;
+    exit 1;
+  fi;
+  $unpackcmd "../split_img/$file-ramdisk.cpio$compext" | $sudo $cpio -i -d --no-absolute-filenames;
+  if [ ! $? -eq "0" ]; then
+    test "$nosudo" && echo "Unpacking failed, try without --nosudo.";
+    abort;
+    exit 1;
+  fi;
+  cd ..;
 fi;
-$unpackcmd "../split_img/$file-ramdisk.cpio$compext" | $sudo cpio -i -d --no-absolute-filenames;
-if [ ! $? -eq "0" ]; then
-  echo "Unpacking failed, try ./unpackimg.sh --sudo";
-  abort;
-  exit 1;
-fi;
-cd ..;
 
 echo " ";
 echo "Done!";
