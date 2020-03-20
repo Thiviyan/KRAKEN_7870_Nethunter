@@ -38,6 +38,11 @@ exynos7870-a6lte_eur_open_01.dtb \
 exynos7870-a6lte_eur_open_02.dtb \
 exynos7870-a6lte_eur_open_03.dtb
 
+dtb-$(CONFIG_BOARD_A3LTE) += exynos7870-a3y17lte_eur_open_00.dtb \
+exynos7870-a3y17lte_eur_open_01.dtb \
+exynos7870-a3y17lte_eur_open_02.dtb \
+exynos7870-a3y17lte_eur_open_03.dtb
+
 targets += dtbs
 DTB_LIST  := $(dtb-y) $(dtbo-y)
 always    := $(DTB_LIST)

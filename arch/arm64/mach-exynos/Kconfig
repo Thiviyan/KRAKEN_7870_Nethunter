@@ -55,6 +55,10 @@ config BOARD_A6LTE
 	bool "Samsung Galaxy A6 2018 (A600X)
 	default n
 
+config BOARD_A3LTE
+	bool "Samsung Galaxy A3 2017 (A320X)
+	default n
+
 endmenu
 
 endif
