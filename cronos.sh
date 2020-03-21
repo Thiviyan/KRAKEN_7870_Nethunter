@@ -39,7 +39,7 @@ CR_KERNEL=$CR_DIR/arch/arm64/boot/Image
 # Compiled dtb by dtbtool
 CR_DTB=$CR_DIR/boot.img-dtb
 # Kernel Name and Version
-CR_VERSION=RC12
+CR_VERSION=RC13
 CR_NAME=KRAKEN-Kernel
 # Thread count
 CR_JOBS=$(nproc --ignore=1)
