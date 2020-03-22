@@ -116,10 +116,8 @@ echo "0-7" > /dev/cpuset/top-app/cpus
 echo "0-2" > /dev/cpuset/system-background/cpus
 echo "0-3" > /dev/cpuset/restricted/cpus
 # Mali-T830 MP1 optimization into delivering better overall graphical rendering performance combined with great UI experience and battery savings;
-echo "interactive" > /sys/devices/11400000.mali/dvfs_governor
-echo "driver" > /sys/devices/11400000.mali/core_availability_policy
 echo "coarse_demand" > /sys/devices/11400000.mali/power_policy
-echo "1246" > /sys/devices/11400000.mali/max_clock
+echo "1146" > /sys/devices/11400000.mali/max_clock
 echo "343" > /sys/devices/11400000.mali/min_clock 343
 echo "60" > /sys/devices/platform/gpusysfs/fps
 # Enable Dynamic Fsync;

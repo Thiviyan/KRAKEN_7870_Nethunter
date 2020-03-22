@@ -4,7 +4,7 @@
 
 config HZ
 	int "Timer frequency"
-	default "500"
+	default "250"
 	range 12 12288
 
 	help
