@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Butterizer 1.7
+# Butterizer 1.8
 # Originally Coded by SPARTANICUS, iGlitch @XDAdevelopers
 
 log_print "Butterizer process started"
@@ -164,10 +164,16 @@ LOG_FILE=/storage/emulated/0
 echo $(date) > /storage/emulated/0/butterizer.log
 if [ $? -eq 0 ]
 then
-  echo "Project Butterizer was executed successfully! You're currently running on Butterizer 1.7!" >> /storage/emulated/0/butterizer.log
+  echo "Governor tweaks: applied
+HMP tweaks: applied
+CPUSet tweaks: applied
+Mali tweaks: applied
+FS tweaks: applied
+Kernel tweaks: applied
+Butterizer was executed successfully!" >> /storage/emulated/0/butterizer.log
   exit 0
 else
-  echo "Project Butterizer wasn't executed successfully!" >> /storage/emulated/0/butterizer.log
+  echo "Butterizer wasn't executed successfully!" >> /storage/emulated/0/butterizer.log
   exit 1
 fi
 # The End;
