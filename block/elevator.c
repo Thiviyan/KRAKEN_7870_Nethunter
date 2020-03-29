@@ -64,6 +64,18 @@ static int elv_iosched_allow_merge(struct request *rq, struct bio *bio)
 	return 1;
 }
 
+static int elv_iosched_allow_bio_merge(struct request *rq, struct bio *bio)
+{
+	struct request_queue *q = rq->q;
+	struct elevator_queue *e = q->elevator;
+
+	if (e->type->ops.elevator_allow_bio_merge_fn)
+		return e->type->ops.elevator_allow_bio_merge_fn(q, rq, bio);
+
+	return 1;
+}
+
+
 /*
  * can we safely merge with this request?
  */
@@ -76,6 +88,17 @@ bool elv_rq_merge_ok(struct request *rq, struct bio *bio)
 		return 0;
 
 	return 1;
+}
+
+bool elv_bio_merge_ok(struct request *rq, struct bio *bio)
+{
+	if (!blk_rq_merge_ok(rq, bio))
+		return false;
+
+	if (!elv_iosched_allow_bio_merge(rq, bio))
+		return false;
+
+	return true;
 }
 EXPORT_SYMBOL(elv_rq_merge_ok);
 
