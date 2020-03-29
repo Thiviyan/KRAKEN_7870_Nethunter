@@ -3,6 +3,16 @@
 # KRAKEN defconfig
 #
 #
+# General setup
+# CONFIG_AUDIT is not set
+# CONFIG_HAVE_ARCH_AUDITSYSCALL is not set
+# CONFIG_AUDITSYSCALL is not set
+# CONFIG_AUDIT_WATCH is not set
+# CONFIG_AUDIT_TREE is not set
+# CONFIG_NETFILTER_XT_TARGET_AUDIT is not set
+# CONFIG_INTEGRITY_AUDIT is not set
+# CONFIG_AUDIT_GENERIC is not set
+# CONFIG_AUDIT_COMPAT_GENERIC is not set
 # ARM GPU Configuration
 #
 # CONFIG_MALI_GATOR_SUPPORT is not set
