@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Butterizer 1.8
+# Butterizer 1.9
 # Originally Coded by SPARTANICUS, iGlitch @XDAdevelopers
 
 log_print "Butterizer process started"
@@ -129,16 +129,9 @@ echo "20" > /proc/sys/fs/lease-break-time
 echo "128" > /proc/sys/kernel/random/read_wakeup_threshold
 echo "96" > /proc/sys/kernel/random/urandom_min_reseed_secs
 echo "2560" > /proc/sys/kernel/random/write_wakeup_threshold
-# Enable CFQ group idle mode for improved scheduling effectivness by merging the IO queues in a "unified group" instead of treating them as individual IO based queues;
-for i in /sys/block/*/queue/iosched; do
-  echo "1" > $i/group_idle;
-done;
-# Disable CFQ low latency mode for overall increased IO based scheduling throughput and for better overall needed responsivness & performance from the system;
-for i in /sys/block/*/queue/iosched; do
-  echo "0" > $i/low_latency;
-done;
 # Wide block based tuning for reduced lag and less possible amount of general IO scheduling based overhead (Thanks to pkgnex @ XDA for the more than pretty much simplified version of this tweak. You really rock, dude!);
 for i in /sys/block/*/queue; do
+  echo "fiops" > $i/scheduler
   echo "0" > $i/add_random;
   echo "0" > $i/discard_max_bytes;
   echo "0" > $i/iostats;
