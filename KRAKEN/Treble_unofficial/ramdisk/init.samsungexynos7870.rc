@@ -977,6 +977,9 @@ service gpsd /vendor/bin/hw/gpsd -c /vendor/etc/gnss/gps.cfg
 
 
 # LPM
+service lpm /system/bin/lpm
+    class sec-charger
+    critical
 on property:ro.bootmode=charger
    mount ext4 /dev/block/platform/13540000.dwmmc0/by-name/SYSTEM /system wait ro
 
