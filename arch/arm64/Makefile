@@ -72,7 +72,7 @@ libs-$(CONFIG_EFI_STUB) += drivers/firmware/efi/libstub/
 ifeq ($(CONFIG_BUILD_ARM64_APPENDED_DTB_IMAGE),y)
 KBUILD_IMAGE	:= Image.gz-dtb
 else
-KBUILD_IMAGE	:= Image.gz
+KBUILD_IMAGE	:= Image
 endif
 
 KBUILD_DTBS	:= dtbs

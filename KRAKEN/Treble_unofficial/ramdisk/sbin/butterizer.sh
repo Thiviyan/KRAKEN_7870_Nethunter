@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Butterizer 1.6
+# Butterizer 1.8
 # Originally Coded by SPARTANICUS, iGlitch @XDAdevelopers
 
 log_print "Butterizer process started"
@@ -117,8 +117,8 @@ echo "0-2" > /dev/cpuset/system-background/cpus
 echo "0-3" > /dev/cpuset/restricted/cpus
 # Mali-T830 MP1 optimization into delivering better overall graphical rendering performance combined with great UI experience and battery savings;
 echo "coarse_demand" > /sys/devices/11400000.mali/power_policy
-echo "1146" > /sys/devices/11400000.mali/max_clock
-echo "343" > /sys/devices/11400000.mali/min_clock 343
+echo "1001" > /sys/devices/11400000.mali/max_clock
+echo "343" > /sys/devices/11400000.mali/min_clock
 echo "60" > /sys/devices/platform/gpusysfs/fps
 # Enable Dynamic Fsync;
 echo "1" > /sys/kernel/dyn_fsync/Dyn_fsync_active
@@ -164,10 +164,16 @@ LOG_FILE=/storage/emulated/0
 echo $(date) > /storage/emulated/0/butterizer.log
 if [ $? -eq 0 ]
 then
-  echo "Project Butterizer was executed successfully! You're currently running on Butterizer 1.6!" >> /storage/emulated/0/butterizer.log
+  echo "Governor tweaks: applied
+HMP tweaks: applied
+CPUSet tweaks: applied
+Mali tweaks: applied
+FS tweaks: applied
+Kernel tweaks: applied
+Butterizer was executed successfully!" >> /storage/emulated/0/butterizer.log
   exit 0
 else
-  echo "Project Butterizer wasn't executed successfully!" >> /storage/emulated/0/butterizer.log
+  echo "Butterizer wasn't executed successfully!" >> /storage/emulated/0/butterizer.log
   exit 1
 fi
 # The End;

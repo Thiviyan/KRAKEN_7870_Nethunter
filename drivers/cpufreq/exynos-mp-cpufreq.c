@@ -55,7 +55,7 @@
 #define VOLT_RANGE_STEP		25000
 #define CLUSTER_ID(cl)		(cl ? ID_CL1 : ID_CL0)
 
-#define FREQ_OSCCLK			26000
+#define FREQ_OSCCLK			27000
 
 static struct exynos_dvfs_info *exynos_info[CL_END];
 static struct cpufreq_freqs *freqs[CL_END];

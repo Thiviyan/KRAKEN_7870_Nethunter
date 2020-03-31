@@ -396,6 +396,8 @@ KBUILD_CFLAGS   := -Wstrict-prototypes -Wno-trigraphs -pipe \
 		   -w \
 		   -fno-strict-aliasing -fno-common \
 		   -Wno-format-security \
+		   -Wno-attribute-alias \
+		   -Wno-sizeof-pointer-memaccess \
 		   -std=gnu89 $(call cc-option,-fno-PIE)
 
 KBUILD_CLFAGS += -floop-nest-optimize -fgraphite-identity -ftree-loop-distribution
