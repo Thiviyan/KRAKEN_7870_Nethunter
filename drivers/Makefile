@@ -8,6 +8,9 @@
 obj-y				+= irqchip/
 obj-y				+= bus/
 
+obj-$(CONFIG_RTL8821AU)	  += rtl8812au/
+
+
 obj-$(CONFIG_GENERIC_PHY)	+= phy/
 
 # GPIO must come after pinctrl as gpios may need to mux pins etc
