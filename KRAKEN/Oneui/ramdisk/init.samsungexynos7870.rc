@@ -4,6 +4,7 @@ import init.carrier.rc
 import init.wifi.rc
 import init.fac.rc
 import init.gps.rc
+import init.helios.rc
 
 on early-init
     mkdir /efs 0771 radio system
@@ -32,8 +33,34 @@ on post-fs
     setrlimit 8 67108864 67108864
 
 on post-fs-data
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor performance
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1690000
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor performance
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 1794000
 # Log data folder
 #   mkdir /data/log 0771 radio system
+
+#Private Mode
+    mkdir /mnt/shell/privatemode 0700 system system
+    mkdir /storage/Private 0000 system system
+    mkdir /data/privatemode 0770 system system
+    chown system system /data/privatemode
+    restorecon /data/privatemode
+
+# Permissions for gnss
+    chmod 0660 /dev/gnss_ipc
+    chown system system /dev/gnss_ipc
+    mkdir /data/system 0771 system system
+    chown system system /data/system
+    mkdir /data/system/gps 0771 system system
+    chown system system /data/system/gps
+    rm /data/system/gps/gps_started
+    rm /data/system/gps/glonass_started
+    rm /data/system/gps/beidou_started
+    rm /data/system/gps/smd_started
+    rm /data/system/gps/sv_cno.info
+
+    setprop vold.post_fs_data_done 1
 
 #SystemFramework
     chown system system /data/cache/backup
@@ -152,11 +179,11 @@ on boot
 
     # GPU dvfs node
     chown radio system /sys/devices/11400000.mali/dvfs_table
-    chmod 0664 /sys/devices/11400000.mali/dvfs_table
+    chmod 000 /sys/devices/11400000.mali/dvfs_table
     chown radio system /sys/devices/11400000.mali/dvfs_min_lock
-    chmod 0664 /sys/devices/11400000.mali/dvfs_min_lock
+    chmod 000 /sys/devices/11400000.mali/dvfs_min_lock
     chown radio system /sys/devices/11400000.mali/dvfs_max_lock
-    chmod 0664 /sys/devices/11400000.mali/dvfs_max_lock
+    chmod 000 /sys/devices/11400000.mali/dvfs_max_lock
 
     # mif, int
     chown radio system /sys/class/devfreq/17000010.devfreq_mif/min_freq
@@ -1004,7 +1031,9 @@ on post-fs-data
     chown root root /sys/power/cpuhotplug/enable
     chmod 0444 /sys/power/cpuhotplug/enable
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor performance
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1690000
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor performance
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 1794000
 #IO parameters tuning during boot
     chown system system /sys/block/mmcblk0/queue/read_ahead_kb
     chown system system /sys/block/dm-0/queue/read_ahead_kb
