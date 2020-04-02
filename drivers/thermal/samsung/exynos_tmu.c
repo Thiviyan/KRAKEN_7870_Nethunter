@@ -1142,7 +1142,7 @@ static int exynos_tmu_ect_set_information(struct platform_device *pdev)
 		else
 			pdata->trigger_type[i] = (i == function->num_of_range - 1 ? HW_TRIP : THROTTLE_ACTIVE);
 
-		if (function->range_list[i].max_frequency == 1586000)
+		if (function->range_list[i].max_frequency == 1690000)
 			function->range_list[i].max_frequency = 1794000;
 
 		pdata->freq_tab[i].temp_level = function->range_list[i].lower_bound_temperature;
