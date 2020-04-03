@@ -1443,9 +1443,9 @@
 		resolution = <1080 1920>;
 		size = <68 121>;
 		ddi_type = <0>;
-		timing,refresh = <60>;
+		timing,refresh = <65>;
 		/* HBP HFP HSW */
-		timing,h-porch = <32 120 4>;
+		timing,h-porch = <1 78 1>;
 		/* VBP VFP VSW */
 		timing,v-porch = <4 21 2>;
 		timing,dsi-hs-clk = <1000>;
