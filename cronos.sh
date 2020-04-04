@@ -31,6 +31,7 @@ CR_PRODUCT=$CR_DIR/KRAKEN/Product
 # Presistant A.I.K Location
 CR_AIK=$CR_DIR/KRAKEN/A.I.K
 # Main Ramdisk Location
+CR_RAMDISK_AOSP=$CR_DIR/KRAKEN/AOSP
 CR_RAMDISK_ONEUI=$CR_DIR/KRAKEN/Oneui
 CR_RAMDISK_PORT=$CR_DIR/KRAKEN/Treble_unofficial
 CR_RAMDISK_TREBLE=$CR_DIR/KRAKEN/Treble_official
@@ -60,6 +61,10 @@ export $CR_ARCH
 CR_ANDROID_J710X=n
 CR_PLATFORM_J710X=7.0.0
 ##########################################
+# Device specific Variables [SM-A320X]
+CR_DTSFILES_A320X="exynos7870-a3y17lte_eur_open_00.dtb exynos7870-a3y17lte_eur_open_01.dtb exynos7870-a3y17lte_eur_open_02.dtb exynos7870-a3y17lte_eur_open_03.dtb"
+CR_CONFG_A320X=a3y17lte_defconfig
+CR_VARIANT_A320X=A320X
 # Device specific Variables [SM-J530_2GB (F/G/S/L/K)]
 CR_DTSFILES_J530X="exynos7870-j5y17lte_eur_open_00.dtb exynos7870-j5y17lte_eur_open_01.dtb exynos7870-j5y17lte_eur_open_02.dtb exynos7870-j5y17lte_eur_open_03.dtb exynos7870-j5y17lte_eur_open_05.dtb exynos7870-j5y17lte_eur_open_07.dtb"
 CR_CONFG_J530X=j5y17lte_defconfig
@@ -173,6 +178,10 @@ BUILD_IMAGE_NAME()
   if [ $CR_VARIANT = $CR_VARIANT_J730X-ONEUI ]; then
     FL_VARIANT="J730X-OneUI"
     FL_MODEL=j7y17lte
+  fi
+  if [ $CR_VARIANT = $CR_VARIANT_A320X-AOSP ]; then
+    FL_VARIANT="A320X-AOSP"
+    FL_MODEL=a3y17lte
   fi
   if [ $CR_VARIANT = $CR_VARIANT_J710X-TREBLE ]; then
     FL_VARIANT="J710X-Treble"
@@ -375,8 +384,8 @@ clear
 echo "----------------------------------------------"
 echo "$CR_NAME $CR_VERSION Build Script"
 echo "----------------------------------------------"
-PS3='Please select your option (1-9): '
-menuvar=("SM-J530X" "SM-J730X" "SM-J710X" "SM-J701X" "SM-G610X" "SM-J600X" "SM-A600X" "Build_All" "Exit")
+PS3='Please select your option (1-10): '
+menuvar=("SM-J530X" "SM-J730X" "SM-J710X" "SM-J701X" "SM-G610X" "SM-J600X" "SM-A600X" "SM-A320X" "Build_All" "Exit")
 select menuvar in "${menuvar[@]}"
 do
     case $menuvar in
@@ -449,6 +458,36 @@ do
               CR_CONFIG_USB=$CR_CONFIG_TREBLE
               CR_VARIANT=$CR_VARIANT_J710X-TREBLE
               CR_RAMDISK=$CR_RAMDISK_PORT
+              CR_DTB_MOUNT=$CR_DTS_TREBLE
+            else
+              echo " Building OneUI variant "
+              CR_CONFIG_USB=$CR_CONFIG_ONEUI
+              CR_VARIANT=$CR_VARIANT_J710X-ONEUI
+              CR_DTB_MOUNT=$CR_DTS_ONEUI
+              CR_RAMDISK=$CR_RAMDISK_ONEUI
+            fi
+            BUILD_IMAGE_NAME
+            BUILD_GENERATE_CONFIG
+            BUILD_ZIMAGE
+            BUILD_DTB
+            PACK_BOOT_IMG
+            PACK_FLASHABLE
+            BUILD_OUT
+            read -n1 -r key
+            break
+            ;;
+        "SM-A320X")
+            clear
+            echo "Starting $CR_VARIANT_A320X kernel build..."
+            export ANDROID_MAJOR_VERSION=$CR_ANDROID
+            export PLATFORM_VERSION=$CR_PLATFORM
+            CR_CONFIG=$CR_CONFG_A320X
+            CR_DTSFILES=$CR_DTSFILES_A320X
+            if [ $CR_MODE = "2" ]; then
+              echo " Building Treble variant "
+              CR_CONFIG_USB=$CR_CONFIG_TREBLE
+              CR_VARIANT=$CR_VARIANT_A320X-AOSP
+              CR_RAMDISK=$CR_RAMDISK_AOSP
               CR_DTB_MOUNT=$CR_DTS_TREBLE
             else
               echo " Building OneUI variant "
