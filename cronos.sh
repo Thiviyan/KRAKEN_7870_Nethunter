@@ -39,8 +39,13 @@ CR_KERNEL=$CR_DIR/arch/arm64/boot/Image
 # Compiled dtb by dtbtool
 CR_DTB=$CR_DIR/boot.img-dtb
 # Kernel Name and Version
+<<<<<<< d6c5527ac07ab9d62030470cb2393dff502f3c5c
 CR_VERSION=RC12
 CR_NAME=KRAKEN-Kernel
+=======
+CR_VERSION=N16
+CR_NAME=S133PY
+>>>>>>> version changed
 # Thread count
 CR_JOBS=$(nproc --ignore=1)
 # Target android version and platform (7/n/8/o/9/p)
