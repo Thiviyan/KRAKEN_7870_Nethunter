@@ -1,13 +1,10 @@
 EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS) -fno-pie
-#EXTRA_CFLAGS += -O1
-EXTRA_CFLAGS += -O3
+EXTRA_CFLAGS += -O1
+#EXTRA_CFLAGS += -O3
 EXTRA_CFLAGS += -Wno-unused-variable
 EXTRA_CFLAGS += -Wno-unused-value
 EXTRA_CFLAGS += -Wno-unused-label
 EXTRA_CFLAGS += -Wno-unused-parameter
-EXTRA_CFLAGS += -Wno-parentheses-equality
-EXTRA_CFLAGS += -Wno-constant-conversion
-EXTRA_CFLAGS += -Wno-enum-conversion
 EXTRA_CFLAGS += -Wno-unused-function
 EXTRA_CFLAGS += -Wno-unused
 EXTRA_CFLAGS += -Wno-vla
@@ -94,8 +91,7 @@ CONFIG_RTW_SDIO_PM_KEEP_POWER = y
 ###################### MP HW TX MODE FOR VHT #######################
 CONFIG_MP_VHT_HW_TX_MODE = n
 ###################### Platform Related #######################
-CONFIG_PLATFORM_ANDROID_ARM64 = y
-CONFIG_PLATFORM_I386_PC = n
+CONFIG_PLATFORM_I386_PC = y
 CONFIG_PLATFORM_ARM_RPI = n
 CONFIG_PLATFORM_ARM64_RPI = n
 CONFIG_PLATFORM_ANDROID_X86 = n
@@ -1065,18 +1061,6 @@ KVER ?= $(shell uname -r)
 KSRC := /lib/modules/$(KVER)/build
 MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
 INSTALL_PREFIX :=
-endif
-
-
-ifeq ($(CONFIG_PLATFORM_ANDROID_ARM64), y)
-# For this to work, change the "modules:" section is also needed, in order to build with CLANG.
-# "$(MAKE) ARCH=$(ARCH) SUBARCH=$(ARCH) REAL_CC=${CC_DIR}/clang CLANG_TRIPLE=aarch64-linux-gnu- CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) M=$(shell pwd) O="$(KBUILD_OUTPUT)" modules"
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -fno-pic
-EXTRA_CFLAGS += -DRTW_ENABLE_WIFI_CONTROL_FUNC -DCONFIG_RADIO_WORK
-#Enable this to have two interfaces:
-#EXTRA_CFLAGS += -DCONFIG_CONCURRENT_MODE
-EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
-EXTRA_CFLAGS += -DCONFIG_P2P_IPS
 endif
 
 ifeq ($(CONFIG_PLATFORM_ARM_ODROIDC2), y)

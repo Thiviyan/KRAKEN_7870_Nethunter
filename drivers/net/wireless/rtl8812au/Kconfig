@@ -1,7 +1,6 @@
 config 88XXAU
-	tristate "Realtek 88xxAU USB WiFi"
+	tristate "Realtek 88XXau USB WiFi"
 	depends on USB
-	default y
 	---help---
 	  Help message of 88XXau
 

@@ -19,14 +19,16 @@ obj-$(CONFIG_AT76C50X_USB)      += at76c50x-usb.o
 obj-$(CONFIG_PRISM54)		+= prism54/
 
 obj-$(CONFIG_HOSTAP)		+= hostap/
-obj-$(CONFIG_B43)		+= b43/
+obj-$(CONFIG_B43)			+= b43/
 obj-$(CONFIG_B43LEGACY)		+= b43legacy/
 obj-$(CONFIG_ZD1211RW)		+= zd1211rw/
 obj-$(CONFIG_RTL8180)		+= rtl818x/
 obj-$(CONFIG_RTL8187)		+= rtl818x/
 obj-$(CONFIG_RTLWIFI)		+= rtlwifi/
-obj-$(CONFIG_88XXAU)            += rtl8812au/
-obj-y(CONFIG_RTL8188EU)        	+= rtl8188eus/
+obj-$(CONFIG_88XXAU)        += rtl8812au/
+obj-y     					+= rtl8188eus/
+obj-y        				+= rtl8192eu/
+obj-$(CONFIG_RTL8XXXU) 		+= rtwifi/
 
 
 # 16-bit wireless PCMCIA client drivers
@@ -43,6 +45,7 @@ obj-$(CONFIG_LIBERTAS_THINFIRM)	+= libertas_tf/
 obj-$(CONFIG_ADM8211)	+= adm8211.o
 
 obj-$(CONFIG_MWL8K)	+= mwl8k.o
+
 
 obj-$(CONFIG_IWLWIFI)	+= iwlwifi/
 obj-$(CONFIG_IWLEGACY)	+= iwlegacy/

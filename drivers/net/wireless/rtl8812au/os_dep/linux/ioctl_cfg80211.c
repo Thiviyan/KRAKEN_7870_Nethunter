@@ -1062,7 +1062,7 @@ void rtw_cfg80211_indicate_connect(_adapter *padapter)
 #ifdef CONFIG_P2P
 	struct wifidirect_info *pwdinfo = &(padapter->wdinfo);
 #endif
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 9, 0)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)
 	struct cfg80211_roam_info roam_info ={};
 #endif
 
@@ -1135,7 +1135,7 @@ check_bss:
 		notify_channel = ieee80211_get_channel(wiphy, freq);
 		#endif
 
-		#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 9, 0)
+		#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)
 		roam_info.bssid = cur_network->network.MacAddress;
 		roam_info.req_ie = pmlmepriv->assoc_req + sizeof(struct rtw_ieee80211_hdr_3addr) + 2;
 		roam_info.req_ie_len = pmlmepriv->assoc_req_len - sizeof(struct rtw_ieee80211_hdr_3addr) - 2;
@@ -1154,7 +1154,7 @@ check_bss:
 			, pmlmepriv->assoc_rsp + sizeof(struct rtw_ieee80211_hdr_3addr) + 6
 			, pmlmepriv->assoc_rsp_len - sizeof(struct rtw_ieee80211_hdr_3addr) - 6
 			, GFP_ATOMIC);
-		#endif /*LINUX_VERSION_CODE >= KERNEL_VERSION(4, 9, 0)*/
+		#endif /*LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)*/
 
 		RTW_INFO(FUNC_ADPT_FMT" call cfg80211_roamed\n", FUNC_ADPT_ARG(padapter));
 
@@ -2324,23 +2324,21 @@ static int cfg80211_rtw_get_station(struct wiphy *wiphy,
 
 	sinfo->filled |= STATION_INFO_BSS_PARAM;
 
-	#if defined (LINUX_VERSION_CODE) && (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 20, 0))
-		if (!psta->no_short_preamble_set)
-		sinfo->bss_param.flags |= STATION_INFO_BSS_PARAM_SHORT_PREAMBLE;
+	if (!psta->no_short_preamble_set)
+	sinfo->bss_param.flags |= NL80211_STA_BSS_PARAM_SHORT_PREAMBLE;
 
-		if (!psta->no_short_slot_time_set)
-	  	sinfo->bss_param.flags |= STATION_INFO_BSS_PARAM_SHORT_SLOT_TIME;
+	if (!psta->no_short_slot_time_set)
+	  sinfo->bss_param.flags |= NL80211_STA_BSS_PARAM_SHORT_PREAMBLE;
 
-		/* no idea how to check this yet */
-		if (0)
-		sinfo->bss_param.flags |= STATION_INFO_BSS_PARAM_CTS_PROT;
+	/* no idea how to check this yet */
+	if (0)
+	sinfo->bss_param.flags |= STATION_INFO_BSS_PARAM;
 
-		/* is this actually the dtim_period? */
-		sinfo->bss_param.flags |= STATION_INFO_BSS_PARAM_DTIM_PERIOD;
-		sinfo->bss_param.dtim_period = pwrctl->dtim;
+	/* is this actually the dtim_period? */
+	sinfo->bss_param.flags |= STATION_INFO_BSS_PARAM;
+	sinfo->bss_param.dtim_period = pwrctl->dtim;
 
-		sinfo->bss_param.beacon_interval = get_beacon_interval(&cur_network->network);
-	#endif
+	sinfo->bss_param.beacon_interval = get_beacon_interval(&cur_network->network);
 
 	}
 
@@ -2473,7 +2471,7 @@ static int cfg80211_rtw_change_iface(struct wiphy *wiphy,
 	case NL80211_IFTYPE_P2P_CLIENT:
 		is_p2p = _TRUE;
 	#endif
-	/* fallthrough */
+	__attribute__ ((__fallthrough__));
 	case NL80211_IFTYPE_STATION:
 		networkType = Ndis802_11Infrastructure;
 
@@ -2498,7 +2496,7 @@ static int cfg80211_rtw_change_iface(struct wiphy *wiphy,
 	case NL80211_IFTYPE_P2P_GO:
 		is_p2p = _TRUE;
 	#endif
-	/* fallthrough */
+	__attribute__ ((__fallthrough__));
 	case NL80211_IFTYPE_AP:
 		networkType = Ndis802_11APMode;
 
@@ -9616,10 +9614,10 @@ struct ieee80211_supported_band *band;
 		wiphy->bands[NL80211_BAND_5GHZ] = rtw_spt_band_alloc(BAND_ON_5G);
 #endif
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 38) && LINUX_VERSION_CODE < KERNEL_VERSION(3, 0, 0))
 #if defined(CONFIG_NET_NS)
 	wiphy->flags |= WIPHY_FLAG_NETNS_OK;
 #endif //CONFIG_NET_NS
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 38) && LINUX_VERSION_CODE < KERNEL_VERSION(3, 0, 0))
 	wiphy->flags |= WIPHY_FLAG_SUPPORTS_SEPARATE_DEFAULT_KEYS;
 #endif
 
@@ -10149,12 +10147,6 @@ int rtw_wiphy_register(struct wiphy *wiphy)
 {
 	RTW_INFO(FUNC_WIPHY_FMT"\n", FUNC_WIPHY_ARG(wiphy));
 
-#if ( ((LINUX_VERSION_CODE < KERNEL_VERSION(5, 3, 0)) &&  \
-        LINUX_VERSION_CODE >= KERNEL_VERSION(3, 14, 0)) \
-     || defined(RTW_VENDOR_EXT_SUPPORT) )
-	rtw_cfgvendor_attach(wiphy);
-#endif
-
 	rtw_regd_init(wiphy);
 
 	return wiphy_register(wiphy);
@@ -10163,12 +10155,6 @@ int rtw_wiphy_register(struct wiphy *wiphy)
 void rtw_wiphy_unregister(struct wiphy *wiphy)
 {
 	RTW_INFO(FUNC_WIPHY_FMT"\n", FUNC_WIPHY_ARG(wiphy));
-
-#if ( ((LINUX_VERSION_CODE < KERNEL_VERSION(5, 3, 0)) &&  \
-        LINUX_VERSION_CODE >= KERNEL_VERSION(3, 14, 0)) \
-     || defined(RTW_VENDOR_EXT_SUPPORT) )
-	rtw_cfgvendor_detach(wiphy);
-#endif
 
 	#if defined(RTW_DEDICATED_P2P_DEVICE)
 	rtw_pd_iface_free(wiphy);

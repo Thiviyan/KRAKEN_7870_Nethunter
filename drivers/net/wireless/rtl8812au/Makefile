@@ -91,11 +91,11 @@ CONFIG_RTW_SDIO_PM_KEEP_POWER = y
 ###################### MP HW TX MODE FOR VHT #######################
 CONFIG_MP_VHT_HW_TX_MODE = n
 ###################### Platform Related #######################
-CONFIG_PLATFORM_I386_PC = n
-CONFIG_PLATFORM_ANDROID_ARM64 = y
+CONFIG_PLATFORM_I386_PC = y
+CONFIG_PLATFORM_ANDROID_ARM64 = n
 CONFIG_PLATFORM_ARM_RPI = n
 CONFIG_PLATFORM_ARM64_RPI = n
-CONFIG_PLATFORM_ARM_JET_NANO = n
+CONFIG_PLATFORM_ARM_NV_NANO = n
 CONFIG_PLATFORM_ANDROID_X86 = n
 CONFIG_PLATFORM_ANDROID_INTEL_X86 = n
 CONFIG_PLATFORM_JB_X86 = n
@@ -179,7 +179,7 @@ endif
 
 ifeq ($(CONFIG_RTL8812A)_$(CONFIG_RTL8821A)_$(CONFIG_RTL8814A), y_y_y)
 
-EXTRA_CFLAGS += -DDRV_NAME=\"88XXau\"
+EXTRA_CFLAGS += -DDRV_NAME=\"rtl88XXau\"
 ifeq ($(CONFIG_USB_HCI), y)
 USER_MODULE_NAME = 88XXau
 endif
@@ -196,7 +196,6 @@ _OS_INTFS_FILES :=	os_dep/osdep_service.o \
 			os_dep/linux/mlme_linux.o \
 			os_dep/linux/recv_linux.o \
 			os_dep/linux/ioctl_cfg80211.o \
-			os_dep/linux/rtw_cfgvendor.o \
 			os_dep/linux/wifi_regd.o \
 			os_dep/linux/rtw_android.o \
 			os_dep/linux/rtw_proc.o \
@@ -1176,15 +1175,15 @@ MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
 INSTALL_PREFIX :=
 endif
 
-# NVidia Jetson Nano
-ifeq ($(CONFIG_PLATFORM_ARM_JET_NANO), y)
+ifeq ($(CONFIG_PLATFORM_ARM_NV_NANO), y)
 EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN
-EXTRA_CFLAGS += -DCONFIG_CONCURRENT_MODE
 EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 ARCH := arm64
-KVER ?= $(shell uname -r)
-KSRC := /usr/src/linux-headers-$(KVER)-ubuntu18.04_aarch64/kernel-4.9
-MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/realtek/rtl8812au/
+KVER := $(shell uname -r)
+KSRC := /lib/modules/$(KVER)/build
+MODDESTDIR := /lib/modules/$(KVER)/kernel/drivers/net/wireless/
+INSTALL_PREFIX :=
+STAGINGMODDIR := /lib/modules/$(KVER)/kernel/drivers/staging
 endif
 
 ifeq ($(CONFIG_PLATFORM_ARM_ODROIDC2), y)
