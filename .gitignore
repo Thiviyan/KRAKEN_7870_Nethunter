@@ -31,7 +31,7 @@ modules.builtin
 *.lzo
 *.patch
 *.gcno
-
+*.pdf
 #
 # Top-level generic files
 #
@@ -43,7 +43,8 @@ modules.builtin
 /System.map
 /Module.markers
 /Module.symvers
-
+/MODS
+/MODULES_OUT
 #
 # Debian directory (make deb-pkg)
 #
@@ -168,3 +169,5 @@ KRAKEN/Product/*.img
 KRAKEN/Product/*.zip
 arch/arm64/boot/dts/*.dtb
 arch/arm64/boot/dts/exynos7870.dtsi
+
+kali-nethunter-kernel/

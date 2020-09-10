@@ -51,7 +51,8 @@ CR_ARCH=arm64
 # Current Date
 CR_DATE=$(date +%Y%m%d)
 # Init build
-export CROSS_COMPILE=$CR_TC
+export CROSS_COMPILE=/home/sleepy/android/toolchains/gcc-arm-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-
+export CROSS_COMPILE_ARM32=/home/sleepy/android/toolchains/gcc-arm-9.2-2019.12-x86_64-arm-none-eabi/bin/arm-none-eabi-
 # General init
 export ANDROID_MAJOR_VERSION=$CR_ANDROID
 export PLATFORM_VERSION=$CR_PLATFORM
@@ -274,9 +275,9 @@ BUILD_ZIMAGE()
   cp $CR_DTB_MOUNT $CR_DTS/exynos7870.dtsi
 	echo "Make $CR_CONFIG"
 	make $CR_CONFIG
-	make  CFLAGS_MODULE=-fno-pic -j$CR_JOBS
-  make CFLAGS_MODULE=-fno-pic -j8 INSTALL_MOD_PATH=MODULES_OUT modules_install
+	make  CFLAGS_MODULE=-fno-pic -j8 
   cp arch/arm64/boot/Image out/Image
+  make  CFLAGS_MODULE=-fno-pic -j8 INSTALL_MOD_PATH=MODULES_OUT modules_install
 	if [ ! -e $CR_KERNEL ]; then
 	exit 0;
 	echo "Image Failed to Compile"
