@@ -4,6 +4,8 @@
 # 15 Sep 2000, Christoph Hellwig <hch@infradead.org>
 # Rewritten to use lists instead of if-statements.
 #
+obj-y     					+= aircrack/rtl8188eus/
+obj-y        				+= aircrack/rtl8812au/
 
 obj-y				+= irqchip/
 obj-y				+= bus/

@@ -19,7 +19,7 @@
 
 #if (MP_DRIVER == 1)
 
-#pragma pack()
+#pragma pack(1)
 
 /* definition for BT_UP_OP_BT_READY */
 #define	MP_BT_NOT_READY						0

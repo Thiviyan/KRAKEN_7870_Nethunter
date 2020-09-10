@@ -1142,7 +1142,8 @@ check_bss:
 		roam_info.resp_ie = pmlmepriv->assoc_rsp + sizeof(struct rtw_ieee80211_hdr_3addr) + 6;
 		roam_info.resp_ie_len = pmlmepriv->assoc_rsp_len - sizeof(struct rtw_ieee80211_hdr_3addr) - 6;
 
-		cfg80211_roamed(padapter->pnetdev, &roam_info, GFP_ATOMIC)
+		cfg80211_roamed(padapter->pnetdev, &roam_info, GFP_ATOMIC);
+		#else
 		cfg80211_roamed(padapter->pnetdev
 			#if LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 39) || defined(COMPAT_KERNEL_RELEASE)
 			, notify_channel
@@ -1153,7 +1154,7 @@ check_bss:
 			, pmlmepriv->assoc_rsp + sizeof(struct rtw_ieee80211_hdr_3addr) + 6
 			, pmlmepriv->assoc_rsp_len - sizeof(struct rtw_ieee80211_hdr_3addr) - 6
 			, GFP_ATOMIC);
-            #endif/*LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)*/
+		#endif /*LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)*/
 
 		RTW_INFO(FUNC_ADPT_FMT" call cfg80211_roamed\n", FUNC_ADPT_ARG(padapter));
 
@@ -2324,17 +2325,17 @@ static int cfg80211_rtw_get_station(struct wiphy *wiphy,
 	sinfo->filled |= STATION_INFO_BSS_PARAM;
 
 	if (!psta->no_short_preamble_set)
-	sinfo->bss_param.flags |= STATION_INFO_BSS_PARAM_SHORT_PREAMBLE;
+	sinfo->bss_param.flags |= NL80211_STA_BSS_PARAM_SHORT_PREAMBLE;
 
 	if (!psta->no_short_slot_time_set)
-	  sinfo->bss_param.flags |= STATION_INFO_BSS_PARAM_SHORT_SLOT_TIME;
+	  sinfo->bss_param.flags |= NL80211_STA_BSS_PARAM_SHORT_PREAMBLE;
 
 	/* no idea how to check this yet */
 	if (0)
-	sinfo->bss_param.flags |= STATION_INFO_BSS_PARAM_CTS_PROT;
+	sinfo->bss_param.flags |= STATION_INFO_BSS_PARAM;
 
 	/* is this actually the dtim_period? */
-	sinfo->bss_param.flags |= STATION_INFO_BSS_PARAM_DTIM_PERIOD;
+	sinfo->bss_param.flags |= STATION_INFO_BSS_PARAM;
 	sinfo->bss_param.dtim_period = pwrctl->dtim;
 
 	sinfo->bss_param.beacon_interval = get_beacon_interval(&cur_network->network);
@@ -9613,10 +9614,10 @@ struct ieee80211_supported_band *band;
 		wiphy->bands[NL80211_BAND_5GHZ] = rtw_spt_band_alloc(BAND_ON_5G);
 #endif
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 38) && LINUX_VERSION_CODE < KERNEL_VERSION(3, 0, 0))
 #if defined(CONFIG_NET_NS)
 	wiphy->flags |= WIPHY_FLAG_NETNS_OK;
 #endif //CONFIG_NET_NS
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 38) && LINUX_VERSION_CODE < KERNEL_VERSION(3, 0, 0))
 	wiphy->flags |= WIPHY_FLAG_SUPPORTS_SEPARATE_DEFAULT_KEYS;
 #endif
 
